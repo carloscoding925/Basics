@@ -1,6 +1,8 @@
 // Package refers to the directory where your java file is located in. 
 package Java;
 
+import java.util.HashMap;
+
 // Java files can have multiple classes, but only one public class.
 // The public class name must match the file name.
 public class JavaCheetSheet {
@@ -51,4 +53,51 @@ class JavaOperators {
     public static int result5 = int1 % int2; // Modulus, returns the remainder of the division
     public static int result6 = int1++; // Increment, adds 1 to the variable
     public static int result7 = int1--; // Decrement, subtracts 1 from the variable
+
+    public static boolean result8 = int1 == int2; // Equal to
+    public static boolean result9 = int1 != int2; // Not equal to
+    public static boolean result10 = int1 > int2; // Greater than
+    public static boolean result11 = int1 < int2; // Less than
+    public static boolean result12 = int1 >= int2; // Greater than or equal to
+    public static boolean result13 = int1 <= int2; // Less than or equal to
+}
+
+class JavaMethods {
+    static void staticMethod() { // This method can be called without creating an object
+        System.out.println("This is a static method"); 
+    }
+
+    public void publicMethod() { // An object must be created to call this method
+        System.out.println("This is a public method");
+    }
+}
+
+class JavaConstructor {
+    private int x; // Variable x is accessible from inside the class
+
+    public JavaConstructor(int y) { // Creates an object 'JavaConstructor' with a parameter 'y' which is used to set the value of x
+        x = y;
+    }
+
+    public int getValue() { // Returns the value of x
+        return x;
+    }
+
+    public void setValue(int y) { // Sets the value of x
+        this.x = y;
+    }
+
+    private void printValue() { // This method can only be accessed from within the class
+        System.out.println(x);
+    }
+}
+
+class JavaHashmapMethods {
+    public void hashmapMethods() {
+        HashMap<Integer, String> map = new HashMap<Integer, String>(); // Creates a new HashMap object
+
+        map.put(1, "Sample Item"); // Adds a new item to the HashMap
+        String myString = map.get(1); // Returns the value of the key 1
+        
+    }
 }
