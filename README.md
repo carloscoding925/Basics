@@ -1,1 +1,1 @@
-# Dedicated space for practicing code
+# Dedicated space for practicing code or documenting useful things
