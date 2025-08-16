@@ -23,16 +23,26 @@ import java.util.Set;
  */
 
 public class Algorithms {
+
+    static class ListNode {
+        int val;
+        ListNode next = null;
+
+        ListNode() {}
+        ListNode(int val) { this.val = val; }
+        ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+    }
+
     public static void main(String[] args) {
         System.out.println("Entry Point");
 
-        arrays();
+        arraysAndLists();
         strings();
         sets();
         maps();
     }
 
-    private static void arrays() {
+    private static void arraysAndLists() {
         // Two Pointer implementation where each pointer starts at the ends of the array
         // O(n) 
         // Case insensitive, only alphanumeric characters, ignore spaces
@@ -56,6 +66,105 @@ public class Algorithms {
             right = right - 1;
         }
         System.out.println("Valid Palindrome");
+
+        // Two Pointer implementation (slow-fast) pointers (Odd Implementation) (Should land on 2)
+        // O(n)
+        ListNode linkedList = new ListNode(0, new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4)))));
+        ListNode slow = linkedList;
+        ListNode fast = linkedList;
+
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        System.out.println("Value at the Middle of Linked List: " + slow.val);
+
+        // Two Pointer implementation (slow-fast) pointers (Even Implementation) (Should land on 3)
+        // O(n)
+        ListNode linkedListTwo = new ListNode(0, new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5))))));
+        ListNode slowTwo = linkedListTwo;
+        ListNode fastTwo = linkedListTwo;
+
+        while (fastTwo != null && fastTwo.next != null) {
+            fastTwo = fastTwo.next.next;
+            slowTwo = slowTwo.next;
+        }
+        System.out.println("Value at the Middle of Linked List: " + slowTwo.val);
+
+        // Sliding Window Algorithm (Fixed Size)
+        // O(n)
+        int[] input = {0, 1, 2, 3, 4, 5, 6};
+        int windowSize = 3;
+
+        if (input.length < windowSize) {
+            System.out.println("Invalid Window Size - Bigger than Input Array");
+        }
+
+        int windowSum = 0;
+        for (int i = 0; i < windowSize; i++) {
+            windowSum = windowSum + input[i];
+        }
+        int maxSum = windowSum;
+
+        for (int rightPointer = windowSize; rightPointer < input.length; rightPointer++) {
+            int leftPointer = rightPointer - windowSize;
+            windowSum = windowSum - input[leftPointer] + input[rightPointer];
+            maxSum = Math.max(maxSum, windowSum);
+        }
+
+        System.out.println("Maximum value in sliding window: " + maxSum);
+
+        // Sliding Window Algorithm with Set (Dynamic Size)
+        // O(n)
+        // Example: Longest Substring Without Repeating Characters
+        String inputString = "abcabcbb";
+        Set<Character> window = new HashSet<>();
+        int maxLength = 0;
+        int swaLeft = 0;
+
+        for (int swaRight = 0; swaRight < inputString.length(); swaRight++) {
+            char rightChar = inputString.charAt(swaRight);
+
+            while(window.contains(rightChar)) {
+                char leftChar = inputString.charAt(swaLeft);
+                window.remove(leftChar);
+                swaLeft++;
+            }
+
+            window.add(rightChar);
+            maxLength = Math.max(maxLength, window.size());
+        }
+
+        System.out.println("Longest Substring Without Repeating Characters: " + maxLength);
+
+        // Sliding Window Algorithm with Map (Dynamic Size)
+        // O(n)
+        // Example: Maximum Sum Subarray with at most k distinct elements
+        int[] numsArray = {1, 2, 1, 2, 3};
+        int k = 2;
+        Map<Integer, Integer> frequency = new HashMap<>();
+        int maxArraySum = 0;
+        int currentSum = 0;
+        int leftPtr = 0;
+
+        for (int rightPtr = 0; rightPtr < numsArray.length; rightPtr++) {
+            currentSum = currentSum + numsArray[rightPtr];
+            frequency.put(numsArray[rightPtr], frequency.getOrDefault(numsArray[rightPtr], 0) + 1);
+
+            while(frequency.size() > k) {
+                int leftElement = numsArray[leftPtr];
+                currentSum = currentSum - leftElement;
+                frequency.put(leftElement, frequency.get(leftElement) - 1);
+                if (frequency.get(leftElement) == 0) {
+                    frequency.remove(leftElement);
+                }
+                leftPtr++;
+            }
+
+            maxArraySum = Math.max(maxArraySum, currentSum);
+        }
+
+        System.out.println("Maximum sum with at most " + k + " distinct elements: " + maxArraySum);
     }
 
     private static void strings() {
