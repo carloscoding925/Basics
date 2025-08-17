@@ -71,6 +71,7 @@ public class Algorithms {
         graphsAndTrees();
         dynamicProgramming();
         sorting();
+        advancedTopics();
     }
 
     private static void arraysAndLists() {
@@ -967,5 +968,452 @@ public class Algorithms {
         }
         
         return output;
+    }
+
+    private static void advancedTopics() {
+        // LRU Cache Implementation
+        // O(1) Time for get() and put() operations
+        // Combines HashMap for O(1) access and Doubly Linked List for O(1) insertion/deletion
+        System.out.println("Testing LRU Cache:");
+        
+        LRUCache cache = new LRUCache(3); // Capacity of 3
+        
+        // Add some values
+        cache.put(1, 10);
+        cache.put(2, 20);
+        cache.put(3, 30);
+        System.out.println("Added (1,10), (2,20), (3,30)");
+        
+        // Access key 1 (makes it most recently used)
+        System.out.println("Get key 1: " + cache.get(1)); // Returns 10
+        
+        // Add new key-value pair (should evict key 2 as it's least recently used)
+        cache.put(4, 40);
+        System.out.println("Added (4,40) - should evict key 2");
+        
+        // Try to access evicted key
+        System.out.println("Get key 2: " + cache.get(2)); // Returns -1 (not found)
+        
+        // Access remaining keys
+        System.out.println("Get key 1: " + cache.get(1)); // Returns 10
+        System.out.println("Get key 3: " + cache.get(3)); // Returns 30
+        System.out.println("Get key 4: " + cache.get(4)); // Returns 40
+        
+        System.out.println("LRU Cache Complete");
+        
+        // Heap/Priority Queue Implementation
+        // Min Heap - O(log n) insertion/deletion, O(1) peek
+        // Max Heap - O(log n) insertion/deletion, O(1) peek
+        System.out.println("\nTesting Min Heap:");
+        
+        MinHeap minHeap = new MinHeap(10);
+        int[] values = {4, 10, 3, 5, 1, 8, 2};
+        
+        // Insert values into min heap
+        for (int val : values) {
+            minHeap.insert(val);
+        }
+        System.out.println("Inserted values: " + java.util.Arrays.toString(values));
+        System.out.println("Min Heap: " + minHeap.toString());
+        System.out.println("Min element (peek): " + minHeap.peek());
+        
+        // Extract min elements
+        System.out.println("Extracting minimums:");
+        while (!minHeap.isEmpty()) {
+            System.out.print(minHeap.extractMin() + " ");
+        }
+        System.out.println();
+        
+        System.out.println("\nTesting Max Heap:");
+        
+        MaxHeap maxHeap = new MaxHeap(10);
+        
+        // Insert values into max heap
+        for (int val : values) {
+            maxHeap.insert(val);
+        }
+        System.out.println("Inserted values: " + java.util.Arrays.toString(values));
+        System.out.println("Max Heap: " + maxHeap.toString());
+        System.out.println("Max element (peek): " + maxHeap.peek());
+        
+        // Extract max elements
+        System.out.println("Extracting maximums:");
+        while (!maxHeap.isEmpty()) {
+            System.out.print(maxHeap.extractMax() + " ");
+        }
+        System.out.println();
+        
+        // Priority Queue Use Case: Find K Largest Elements
+        System.out.println("\nFinding K Largest Elements using Min Heap:");
+        int[] array = {3, 2, 1, 5, 6, 4};
+        int k = 3;
+        int[] kLargest = findKLargest(array, k);
+        System.out.println("Array: " + java.util.Arrays.toString(array));
+        System.out.println("K=" + k + " largest elements: " + java.util.Arrays.toString(kLargest));
+        
+        System.out.println("\nHeap/Priority Queue Complete");
+    }
+    
+    // LRU Cache Implementation using HashMap + Doubly Linked List
+    static class LRUCache {
+        private int capacity;
+        private Map<Integer, Node> cache;
+        private Node head;
+        private Node tail;
+        
+        // Doubly Linked List Node
+        static class Node {
+            int key;
+            int value;
+            Node prev;
+            Node next;
+            
+            Node(int key, int value) {
+                this.key = key;
+                this.value = value;
+            }
+        }
+        
+        public LRUCache(int capacity) {
+            this.capacity = capacity;
+            this.cache = new HashMap<>();
+            
+            // Create dummy head and tail nodes
+            this.head = new Node(0, 0);
+            this.tail = new Node(0, 0);
+            head.next = tail;
+            tail.prev = head;
+        }
+        
+        public int get(int key) {
+            Node node = cache.get(key);
+            if (node == null) {
+                return -1; // Key not found
+            }
+            
+            // Move accessed node to head (most recently used)
+            moveToHead(node);
+            return node.value;
+        }
+        
+        public void put(int key, int value) {
+            Node node = cache.get(key);
+            
+            if (node != null) {
+                // Update existing node
+                node.value = value;
+                moveToHead(node);
+            } else {
+                // Add new node
+                Node newNode = new Node(key, value);
+                
+                if (cache.size() >= capacity) {
+                    // Remove least recently used node (tail)
+                    Node tail = removeTail();
+                    cache.remove(tail.key);
+                }
+                
+                cache.put(key, newNode);
+                addToHead(newNode);
+            }
+        }
+        
+        // Helper method to add node right after head
+        private void addToHead(Node node) {
+            node.prev = head;
+            node.next = head.next;
+            head.next.prev = node;
+            head.next = node;
+        }
+        
+        // Helper method to remove a node from the list
+        private void removeNode(Node node) {
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+        }
+        
+        // Helper method to move node to head
+        private void moveToHead(Node node) {
+            removeNode(node);
+            addToHead(node);
+        }
+        
+        // Helper method to remove tail node
+        private Node removeTail() {
+            Node lastNode = tail.prev;
+            removeNode(lastNode);
+            return lastNode;
+        }
+    }
+    
+    // Min Heap Implementation using Array
+    static class MinHeap {
+        private int[] heap;
+        private int size;
+        private int capacity;
+        
+        public MinHeap(int capacity) {
+            this.capacity = capacity;
+            this.size = 0;
+            this.heap = new int[capacity];
+        }
+        
+        // Get parent index
+        private int parent(int i) {
+            return (i - 1) / 2;
+        }
+        
+        // Get left child index
+        private int leftChild(int i) {
+            return 2 * i + 1;
+        }
+        
+        // Get right child index
+        private int rightChild(int i) {
+            return 2 * i + 2;
+        }
+        
+        // Check if heap is empty
+        public boolean isEmpty() {
+            return size == 0;
+        }
+        
+        // Get minimum element (root)
+        public int peek() {
+            if (isEmpty()) {
+                throw new RuntimeException("Heap is empty");
+            }
+            return heap[0];
+        }
+        
+        // Insert element into heap
+        public void insert(int value) {
+            if (size >= capacity) {
+                throw new RuntimeException("Heap is full");
+            }
+            
+            // Insert at the end
+            heap[size] = value;
+            size++;
+            
+            // Heapify up
+            heapifyUp(size - 1);
+        }
+        
+        // Extract minimum element
+        public int extractMin() {
+            if (isEmpty()) {
+                throw new RuntimeException("Heap is empty");
+            }
+            
+            int min = heap[0];
+            
+            // Move last element to root
+            heap[0] = heap[size - 1];
+            size--;
+            
+            // Heapify down
+            if (size > 0) {
+                heapifyDown(0);
+            }
+            
+            return min;
+        }
+        
+        // Heapify up (bubble up)
+        private void heapifyUp(int index) {
+            while (index > 0 && heap[parent(index)] > heap[index]) {
+                swap(index, parent(index));
+                index = parent(index);
+            }
+        }
+        
+        // Heapify down (bubble down)
+        private void heapifyDown(int index) {
+            int smallest = index;
+            int left = leftChild(index);
+            int right = rightChild(index);
+            
+            // Find smallest among index, left child, and right child
+            if (left < size && heap[left] < heap[smallest]) {
+                smallest = left;
+            }
+            
+            if (right < size && heap[right] < heap[smallest]) {
+                smallest = right;
+            }
+            
+            // If smallest is not the current index, swap and continue
+            if (smallest != index) {
+                swap(index, smallest);
+                heapifyDown(smallest);
+            }
+        }
+        
+        // Swap two elements in heap
+        private void swap(int i, int j) {
+            int temp = heap[i];
+            heap[i] = heap[j];
+            heap[j] = temp;
+        }
+        
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("[");
+            for (int i = 0; i < size; i++) {
+                sb.append(heap[i]);
+                if (i < size - 1) sb.append(", ");
+            }
+            sb.append("]");
+            return sb.toString();
+        }
+    }
+    
+    // Max Heap Implementation using Array
+    static class MaxHeap {
+        private int[] heap;
+        private int size;
+        private int capacity;
+        
+        public MaxHeap(int capacity) {
+            this.capacity = capacity;
+            this.size = 0;
+            this.heap = new int[capacity];
+        }
+        
+        // Get parent index
+        private int parent(int i) {
+            return (i - 1) / 2;
+        }
+        
+        // Get left child index
+        private int leftChild(int i) {
+            return 2 * i + 1;
+        }
+        
+        // Get right child index
+        private int rightChild(int i) {
+            return 2 * i + 2;
+        }
+        
+        // Check if heap is empty
+        public boolean isEmpty() {
+            return size == 0;
+        }
+        
+        // Get maximum element (root)
+        public int peek() {
+            if (isEmpty()) {
+                throw new RuntimeException("Heap is empty");
+            }
+            return heap[0];
+        }
+        
+        // Insert element into heap
+        public void insert(int value) {
+            if (size >= capacity) {
+                throw new RuntimeException("Heap is full");
+            }
+            
+            // Insert at the end
+            heap[size] = value;
+            size++;
+            
+            // Heapify up
+            heapifyUp(size - 1);
+        }
+        
+        // Extract maximum element
+        public int extractMax() {
+            if (isEmpty()) {
+                throw new RuntimeException("Heap is empty");
+            }
+            
+            int max = heap[0];
+            
+            // Move last element to root
+            heap[0] = heap[size - 1];
+            size--;
+            
+            // Heapify down
+            if (size > 0) {
+                heapifyDown(0);
+            }
+            
+            return max;
+        }
+        
+        // Heapify up (bubble up)
+        private void heapifyUp(int index) {
+            while (index > 0 && heap[parent(index)] < heap[index]) {
+                swap(index, parent(index));
+                index = parent(index);
+            }
+        }
+        
+        // Heapify down (bubble down)
+        private void heapifyDown(int index) {
+            int largest = index;
+            int left = leftChild(index);
+            int right = rightChild(index);
+            
+            // Find largest among index, left child, and right child
+            if (left < size && heap[left] > heap[largest]) {
+                largest = left;
+            }
+            
+            if (right < size && heap[right] > heap[largest]) {
+                largest = right;
+            }
+            
+            // If largest is not the current index, swap and continue
+            if (largest != index) {
+                swap(index, largest);
+                heapifyDown(largest);
+            }
+        }
+        
+        // Swap two elements in heap
+        private void swap(int i, int j) {
+            int temp = heap[i];
+            heap[i] = heap[j];
+            heap[j] = temp;
+        }
+        
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("[");
+            for (int i = 0; i < size; i++) {
+                sb.append(heap[i]);
+                if (i < size - 1) sb.append(", ");
+            }
+            sb.append("]");
+            return sb.toString();
+        }
+    }
+    
+    // Helper method: Find K Largest Elements using Min Heap
+    private static int[] findKLargest(int[] nums, int k) {
+        MinHeap minHeap = new MinHeap(k);
+        
+        // Process each element
+        for (int num : nums) {
+            if (minHeap.size < k) {
+                minHeap.insert(num);
+            } else if (num > minHeap.peek()) {
+                minHeap.extractMin();
+                minHeap.insert(num);
+            }
+        }
+        
+        // Extract all elements from heap
+        int[] result = new int[k];
+        for (int i = k - 1; i >= 0; i--) {
+            result[i] = minHeap.extractMin();
+        }
+        
+        return result;
     }
 }
