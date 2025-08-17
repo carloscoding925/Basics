@@ -1433,6 +1433,60 @@ public class Algorithms {
         System.out.println("K=" + k + " largest elements: " + java.util.Arrays.toString(kLargest));
         
         System.out.println("\nHeap/Priority Queue Complete");
+
+        // Backtracking Algorithm Implementation
+        // Time complexity varies by problem - often O(b^d) where b is branching factor and d is depth
+        // Space complexity O(d) for recursion stack depth
+        /*
+         * Use Cases:
+         * - N-Queens problem, Sudoku solver, Knight's tour
+         * - Generating permutations and combinations
+         * - Maze solving, pathfinding with constraints
+         * - Constraint satisfaction problems
+         */
+        System.out.println("\nBacktracking Algorithms:");
+        
+        // Example 1: Generate all permutations of an array
+        int[] nums = {1, 2, 3};
+        System.out.println("Generating permutations of: " + java.util.Arrays.toString(nums));
+        List<List<Integer>> permutations = generatePermutations(nums);
+        System.out.println("All permutations:");
+        for (List<Integer> perm : permutations) {
+            System.out.println(perm);
+        }
+        
+        // Example 2: N-Queens problem (4x4 board)
+        int n = 4;
+        System.out.println("\nSolving " + n + "-Queens problem:");
+        List<List<String>> queenSolutions = solveNQueens(n);
+        System.out.println("Number of solutions: " + queenSolutions.size());
+        if (!queenSolutions.isEmpty()) {
+            System.out.println("First solution:");
+            for (String row : queenSolutions.get(0)) {
+                System.out.println(row);
+            }
+        }
+        
+        // Example 3: Subset generation
+        int[] subsetNums = {1, 2, 3};
+        System.out.println("\nGenerating all subsets of: " + java.util.Arrays.toString(subsetNums));
+        List<List<Integer>> subsets = generateSubsets(subsetNums);
+        System.out.println("All subsets:");
+        for (List<Integer> subset : subsets) {
+            System.out.println(subset);
+        }
+        
+        // Example 4: Combination Sum
+        int[] candidates = {2, 3, 6, 7};
+        int target = 7;
+        System.out.println("\nFinding combinations that sum to " + target + " using: " + java.util.Arrays.toString(candidates));
+        List<List<Integer>> combinations = combinationSum(candidates, target);
+        System.out.println("Valid combinations:");
+        for (List<Integer> combination : combinations) {
+            System.out.println(combination);
+        }
+        
+        System.out.println("\nBacktracking Complete");
     }
     
     // LRU Cache Implementation using HashMap + Doubly Linked List
@@ -1796,5 +1850,180 @@ public class Algorithms {
         }
         
         return result;
+    }
+
+    // Backtracking Algorithm Implementations
+    
+    // Generate all permutations of an array
+    // O(n! * n) Time, O(n) Space (not counting output)
+    private static List<List<Integer>> generatePermutations(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> current = new ArrayList<>();
+        boolean[] used = new boolean[nums.length];
+        
+        backtrackPermutations(nums, current, used, result);
+        return result;
+    }
+    
+    private static void backtrackPermutations(int[] nums, List<Integer> current, boolean[] used, List<List<Integer>> result) {
+        // Base case: if current permutation is complete
+        if (current.size() == nums.length) {
+            result.add(new ArrayList<>(current)); // Make a copy
+            return;
+        }
+        
+        // Try each unused number
+        for (int i = 0; i < nums.length; i++) {
+            if (!used[i]) {
+                // Choose
+                current.add(nums[i]);
+                used[i] = true;
+                
+                // Explore
+                backtrackPermutations(nums, current, used, result);
+                
+                // Unchoose (backtrack)
+                current.remove(current.size() - 1);
+                used[i] = false;
+            }
+        }
+    }
+    
+    // N-Queens Problem
+    // O(N!) Time, O(N) Space
+    private static List<List<String>> solveNQueens(int n) {
+        List<List<String>> result = new ArrayList<>();
+        int[] queens = new int[n]; // queens[i] = column position of queen in row i
+        
+        backtrackNQueens(0, n, queens, result);
+        return result;
+    }
+    
+    private static void backtrackNQueens(int row, int n, int[] queens, List<List<String>> result) {
+        // Base case: all queens placed
+        if (row == n) {
+            result.add(constructBoard(queens, n));
+            return;
+        }
+        
+        // Try placing queen in each column of current row
+        for (int col = 0; col < n; col++) {
+            if (isSafePosition(row, col, queens)) {
+                // Choose
+                queens[row] = col;
+                
+                // Explore
+                backtrackNQueens(row + 1, n, queens, result);
+                
+                // Unchoose (implicit - we'll overwrite queens[row] in next iteration)
+            }
+        }
+    }
+    
+    private static boolean isSafePosition(int row, int col, int[] queens) {
+        // Check if placing queen at (row, col) conflicts with existing queens
+        for (int i = 0; i < row; i++) {
+            int existingCol = queens[i];
+            
+            // Check column conflict
+            if (existingCol == col) {
+                return false;
+            }
+            
+            // Check diagonal conflicts
+            if (Math.abs(row - i) == Math.abs(col - existingCol)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private static List<String> constructBoard(int[] queens, int n) {
+        List<String> board = new ArrayList<>();
+        
+        for (int i = 0; i < n; i++) {
+            StringBuilder row = new StringBuilder();
+            for (int j = 0; j < n; j++) {
+                if (queens[i] == j) {
+                    row.append('Q');
+                } else {
+                    row.append('.');
+                }
+            }
+            board.add(row.toString());
+        }
+        
+        return board;
+    }
+    
+    // Generate all subsets (power set)
+    // O(2^n * n) Time, O(n) Space (not counting output)
+    private static List<List<Integer>> generateSubsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> current = new ArrayList<>();
+        
+        backtrackSubsets(nums, 0, current, result);
+        return result;
+    }
+    
+    private static void backtrackSubsets(int[] nums, int start, List<Integer> current, List<List<Integer>> result) {
+        // Add current subset to result (every recursive call generates a valid subset)
+        result.add(new ArrayList<>(current));
+        
+        // Try adding each remaining element
+        for (int i = start; i < nums.length; i++) {
+            // Choose
+            current.add(nums[i]);
+            
+            // Explore (move to next index to avoid duplicates)
+            backtrackSubsets(nums, i + 1, current, result);
+            
+            // Unchoose (backtrack)
+            current.remove(current.size() - 1);
+        }
+    }
+    
+    // Combination Sum - find all combinations that sum to target
+    // O(2^target) Time in worst case, O(target) Space
+    private static List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> current = new ArrayList<>();
+        
+        // Sort to enable early termination
+        java.util.Arrays.sort(candidates);
+        
+        backtrackCombinationSum(candidates, target, 0, current, result);
+        return result;
+    }
+    
+    private static void backtrackCombinationSum(int[] candidates, int remainingTarget, int start, 
+                                               List<Integer> current, List<List<Integer>> result) {
+        // Base case: found valid combination
+        if (remainingTarget == 0) {
+            result.add(new ArrayList<>(current));
+            return;
+        }
+        
+        // Early termination: if remaining target is negative
+        if (remainingTarget < 0) {
+            return;
+        }
+        
+        // Try each candidate starting from 'start' index
+        for (int i = start; i < candidates.length; i++) {
+            // Early termination: if current candidate is too large
+            if (candidates[i] > remainingTarget) {
+                break; // Since array is sorted, all remaining candidates are also too large
+            }
+            
+            // Choose
+            current.add(candidates[i]);
+            
+            // Explore (note: we pass 'i' not 'i+1' to allow reusing same number)
+            backtrackCombinationSum(candidates, remainingTarget - candidates[i], i, current, result);
+            
+            // Unchoose (backtrack)
+            current.remove(current.size() - 1);
+        }
     }
 }
