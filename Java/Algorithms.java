@@ -41,6 +41,7 @@ public class Algorithms {
         stacks();
         queues();
         bitManipulation();
+        greedy();
     }
 
     static class ListNode {
@@ -2729,5 +2730,430 @@ public class Algorithms {
     // O(1) Time, O(1) Space
     private static boolean hasOnlyOneBitSet(int n) {
         return n > 0 && (n & (n - 1)) == 0;
+    }
+
+    private static void greedy() {
+        // Greedy Algorithms
+        // Make locally optimal choices at each step to achieve global optimum
+        /*
+         * Key Characteristics:
+         * - Makes the best choice at each step without considering future consequences
+         * - Works well when local optimal choices lead to global optimum
+         * - Often used for optimization problems
+         * - Generally faster than dynamic programming but doesn't always guarantee optimal solution
+         * 
+         * Common Use Cases:
+         * - Activity/Interval scheduling
+         * - Huffman coding, fractional knapsack
+         * - Minimum spanning trees (Kruskal's, Prim's)
+         * - Shortest path algorithms (Dijkstra's)
+         * - Job scheduling, resource allocation
+         */
+        System.out.println("Greedy Algorithms:");
+        
+        // Example 1: Activity Selection Problem
+        // O(n log n) Time due to sorting, O(1) Space
+        // Select maximum number of non-overlapping activities
+        int[][] activities = {{1, 3}, {2, 4}, {3, 5}, {0, 6}, {5, 7}, {8, 9}, {5, 9}};
+        List<int[]> selectedActivities = activitySelection(activities);
+        System.out.println("Activity Selection Problem:");
+        System.out.println("Available activities (start, end): ");
+        for (int[] activity : activities) {
+            System.out.println("  " + java.util.Arrays.toString(activity));
+        }
+        System.out.println("Selected activities for maximum non-overlapping: ");
+        for (int[] activity : selectedActivities) {
+            System.out.println("  " + java.util.Arrays.toString(activity));
+        }
+        System.out.println("Total activities selected: " + selectedActivities.size());
+        
+        // Example 2: Fractional Knapsack Problem
+        // O(n log n) Time, O(1) Space
+        // Maximize value within weight constraint (can take fractions)
+        Item[] items = {
+            new Item(10, 60),  // value=60, weight=10, ratio=6.0
+            new Item(20, 100), // value=100, weight=20, ratio=5.0
+            new Item(30, 120)  // value=120, weight=30, ratio=4.0
+        };
+        int capacity = 50;
+        double maxValue = fractionalKnapsack(items, capacity);
+        System.out.println("\nFractional Knapsack Problem:");
+        System.out.println("Items (weight, value):");
+        for (Item item : items) {
+            System.out.println("  Weight: " + item.weight + ", Value: " + item.value + ", Ratio: " + (item.value / (double)item.weight));
+        }
+        System.out.println("Knapsack capacity: " + capacity);
+        System.out.println("Maximum value: " + maxValue);
+        
+        // Example 3: Coin Change (Greedy - works for certain coin systems)
+        // O(n) Time where n is the amount, O(1) Space
+        // Find minimum number of coins to make change
+        int[] coins = {25, 10, 5, 1}; // US coin system - greedy works
+        int amount = 67;
+        List<Integer> coinChange = greedyCoinChange(coins, amount);
+        System.out.println("\nGreedy Coin Change:");
+        System.out.println("Coins available: " + java.util.Arrays.toString(coins));
+        System.out.println("Amount to make: " + amount);
+        System.out.println("Coins used: " + coinChange);
+        System.out.println("Total coins: " + coinChange.size());
+        
+        // Example 4: Job Scheduling with Deadlines
+        // O(n log n) Time, O(n) Space
+        // Maximize profit by scheduling jobs within deadlines
+        Job[] jobs = {
+            new Job('A', 2, 100),
+            new Job('B', 1, 19),
+            new Job('C', 2, 27),
+            new Job('D', 1, 25),
+            new Job('E', 3, 15)
+        };
+        List<Job> scheduledJobs = jobScheduling(jobs);
+        System.out.println("\nJob Scheduling with Deadlines:");
+        System.out.println("Available jobs (ID, deadline, profit):");
+        for (Job job : jobs) {
+            System.out.println("  " + job.id + ": deadline=" + job.deadline + ", profit=" + job.profit);
+        }
+        System.out.println("Scheduled jobs for maximum profit:");
+        int totalProfit = 0;
+        for (Job job : scheduledJobs) {
+            System.out.println("  " + job.id + ": profit=" + job.profit);
+            totalProfit += job.profit;
+        }
+        System.out.println("Total profit: " + totalProfit);
+        
+        // Example 5: Minimum Number of Platforms
+        // O(n log n) Time, O(1) Space
+        // Find minimum platforms needed for train scheduling
+        int[] arrivals = {900, 940, 950, 1100, 1500, 1800};
+        int[] departures = {910, 1200, 1120, 1130, 1900, 2000};
+        int minPlatforms = findMinimumPlatforms(arrivals, departures);
+        System.out.println("\nMinimum Platforms Problem:");
+        System.out.println("Train arrivals: " + java.util.Arrays.toString(arrivals));
+        System.out.println("Train departures: " + java.util.Arrays.toString(departures));
+        System.out.println("Minimum platforms needed: " + minPlatforms);
+        
+        // Example 6: Huffman Coding (Character Frequency Encoding)
+        // O(n log n) Time, O(n) Space
+        // Build optimal prefix codes based on character frequencies
+        char[] characters = {'a', 'b', 'c', 'd', 'e', 'f'};
+        int[] frequencies = {5, 9, 12, 13, 16, 45};
+        HuffmanNode huffmanRoot = buildHuffmanTree(characters, frequencies);
+        Map<Character, String> huffmanCodes = new HashMap<>();
+        generateHuffmanCodes(huffmanRoot, "", huffmanCodes);
+        System.out.println("\nHuffman Coding:");
+        System.out.println("Character frequencies:");
+        for (int i = 0; i < characters.length; i++) {
+            System.out.println("  '" + characters[i] + "': " + frequencies[i]);
+        }
+        System.out.println("Huffman codes:");
+        for (Map.Entry<Character, String> entry : huffmanCodes.entrySet()) {
+            System.out.println("  '" + entry.getKey() + "': " + entry.getValue());
+        }
+        
+        // Example 7: Gas Station Problem
+        // O(n) Time, O(1) Space
+        // Find starting gas station to complete circular tour
+        int[] gas = {1, 2, 3, 4, 5};
+        int[] cost = {3, 4, 5, 1, 2};
+        int startStation = canCompleteCircuit(gas, cost);
+        System.out.println("\nGas Station Problem:");
+        System.out.println("Gas at stations: " + java.util.Arrays.toString(gas));
+        System.out.println("Cost to next station: " + java.util.Arrays.toString(cost));
+        if (startStation != -1) {
+            System.out.println("Can complete circuit starting from station: " + startStation);
+        } else {
+            System.out.println("Cannot complete circuit");
+        }
+        
+        // Example 8: Jump Game (Can reach end)
+        // O(n) Time, O(1) Space
+        // Check if you can reach the last index
+        int[] jumpArray = {2, 3, 1, 1, 4};
+        boolean canJump = canJumpToEnd(jumpArray);
+        System.out.println("\nJump Game:");
+        System.out.println("Array: " + java.util.Arrays.toString(jumpArray));
+        System.out.println("Can reach end: " + canJump);
+        
+        // Jump Game II - Minimum jumps to reach end
+        // O(n) Time, O(1) Space
+        int minJumps = minimumJumps(jumpArray);
+        System.out.println("Minimum jumps to reach end: " + minJumps);
+        
+        System.out.println("\nGreedy Algorithms Complete");
+    }
+    
+    // Activity Selection Problem - Select maximum non-overlapping activities
+    // O(n log n) Time due to sorting, O(1) Space
+    private static List<int[]> activitySelection(int[][] activities) {
+        List<int[]> result = new ArrayList<>();
+        
+        // Sort activities by end time
+        java.util.Arrays.sort(activities, (a, b) -> a[1] - b[1]);
+        
+        // Select first activity
+        result.add(activities[0]);
+        int lastEndTime = activities[0][1];
+        
+        // Select subsequent non-overlapping activities
+        for (int i = 1; i < activities.length; i++) {
+            if (activities[i][0] >= lastEndTime) { // Start time >= last end time
+                result.add(activities[i]);
+                lastEndTime = activities[i][1];
+            }
+        }
+        
+        return result;
+    }
+    
+    // Item class for Fractional Knapsack
+    static class Item {
+        int weight;
+        int value;
+        
+        Item(int weight, int value) {
+            this.weight = weight;
+            this.value = value;
+        }
+    }
+    
+    // Fractional Knapsack Problem - Maximize value with weight constraint
+    // O(n log n) Time, O(1) Space
+    private static double fractionalKnapsack(Item[] items, int capacity) {
+        // Sort items by value-to-weight ratio in descending order
+        java.util.Arrays.sort(items, (a, b) -> Double.compare(
+            (double)b.value / b.weight, (double)a.value / a.weight));
+        
+        double totalValue = 0.0;
+        int remainingCapacity = capacity;
+        
+        for (Item item : items) {
+            if (remainingCapacity >= item.weight) {
+                // Take entire item
+                totalValue += item.value;
+                remainingCapacity -= item.weight;
+            } else if (remainingCapacity > 0) {
+                // Take fraction of item
+                double fraction = (double)remainingCapacity / item.weight;
+                totalValue += item.value * fraction;
+                remainingCapacity = 0;
+                break;
+            }
+        }
+        
+        return totalValue;
+    }
+    
+    // Greedy Coin Change (works for certain coin systems like US coins)
+    // O(n) Time where n is the amount, O(1) Space
+    private static List<Integer> greedyCoinChange(int[] coins, int amount) {
+        List<Integer> result = new ArrayList<>();
+        
+        for (int coin : coins) {
+            while (amount >= coin) {
+                result.add(coin);
+                amount -= coin;
+            }
+        }
+        
+        return result;
+    }
+    
+    // Job class for Job Scheduling
+    static class Job {
+        char id;
+        int deadline;
+        int profit;
+        
+        Job(char id, int deadline, int profit) {
+            this.id = id;
+            this.deadline = deadline;
+            this.profit = profit;
+        }
+    }
+    
+    // Job Scheduling with Deadlines - Maximize profit
+    // O(n log n) Time, O(n) Space
+    private static List<Job> jobScheduling(Job[] jobs) {
+        // Sort jobs by profit in descending order
+        java.util.Arrays.sort(jobs, (a, b) -> b.profit - a.profit);
+        
+        // Find maximum deadline to determine schedule array size
+        int maxDeadline = 0;
+        for (Job job : jobs) {
+            maxDeadline = Math.max(maxDeadline, job.deadline);
+        }
+        
+        // Schedule array to track which jobs are scheduled at each time slot
+        Job[] schedule = new Job[maxDeadline];
+        boolean[] occupied = new boolean[maxDeadline];
+        
+        List<Job> result = new ArrayList<>();
+        
+        // Try to schedule each job
+        for (Job job : jobs) {
+            // Find a free slot for this job (before its deadline)
+            for (int slot = Math.min(maxDeadline - 1, job.deadline - 1); slot >= 0; slot--) {
+                if (!occupied[slot]) {
+                    occupied[slot] = true;
+                    schedule[slot] = job;
+                    result.add(job);
+                    break;
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    // Minimum Platforms needed for train scheduling
+    // O(n log n) Time, O(1) Space
+    private static int findMinimumPlatforms(int[] arrivals, int[] departures) {
+        java.util.Arrays.sort(arrivals);
+        java.util.Arrays.sort(departures);
+        
+        int platforms = 0;
+        int maxPlatforms = 0;
+        int i = 0, j = 0;
+        
+        // Use two pointers to simulate events
+        while (i < arrivals.length && j < departures.length) {
+            if (arrivals[i] <= departures[j]) {
+                // Train arrives, need one more platform
+                platforms++;
+                maxPlatforms = Math.max(maxPlatforms, platforms);
+                i++;
+            } else {
+                // Train departs, free one platform
+                platforms--;
+                j++;
+            }
+        }
+        
+        return maxPlatforms;
+    }
+    
+    // Huffman Tree Node for encoding
+    static class HuffmanNode {
+        char character;
+        int frequency;
+        HuffmanNode left;
+        HuffmanNode right;
+        
+        HuffmanNode(char character, int frequency) {
+            this.character = character;
+            this.frequency = frequency;
+        }
+        
+        HuffmanNode(int frequency, HuffmanNode left, HuffmanNode right) {
+            this.character = '\0'; // Internal node
+            this.frequency = frequency;
+            this.left = left;
+            this.right = right;
+        }
+    }
+    
+    // Build Huffman Tree for optimal character encoding
+    // O(n log n) Time, O(n) Space
+    private static HuffmanNode buildHuffmanTree(char[] characters, int[] frequencies) {
+        // Priority queue (min heap) based on frequency
+        Queue<HuffmanNode> pq = new java.util.PriorityQueue<>((a, b) -> a.frequency - b.frequency);
+        
+        // Add all characters to priority queue
+        for (int i = 0; i < characters.length; i++) {
+            pq.offer(new HuffmanNode(characters[i], frequencies[i]));
+        }
+        
+        // Build tree by combining nodes with lowest frequencies
+        while (pq.size() > 1) {
+            HuffmanNode left = pq.poll();
+            HuffmanNode right = pq.poll();
+            
+            HuffmanNode merged = new HuffmanNode(
+                left.frequency + right.frequency, left, right);
+            
+            pq.offer(merged);
+        }
+        
+        return pq.poll(); // Root of Huffman tree
+    }
+    
+    // Generate Huffman codes from tree
+    private static void generateHuffmanCodes(HuffmanNode root, String code, Map<Character, String> codes) {
+        if (root == null) return;
+        
+        // Leaf node - store the code
+        if (root.left == null && root.right == null) {
+            codes.put(root.character, code.isEmpty() ? "0" : code);
+            return;
+        }
+        
+        // Traverse left and right
+        generateHuffmanCodes(root.left, code + "0", codes);
+        generateHuffmanCodes(root.right, code + "1", codes);
+    }
+    
+    // Gas Station Problem - Find starting station to complete circuit
+    // O(n) Time, O(1) Space
+    private static int canCompleteCircuit(int[] gas, int[] cost) {
+        int totalGas = 0;
+        int totalCost = 0;
+        int currentGas = 0;
+        int start = 0;
+        
+        for (int i = 0; i < gas.length; i++) {
+            totalGas += gas[i];
+            totalCost += cost[i];
+            currentGas += gas[i] - cost[i];
+            
+            // If we can't reach the next station, start from next station
+            if (currentGas < 0) {
+                start = i + 1;
+                currentGas = 0;
+            }
+        }
+        
+        // Check if total gas is enough to complete the circuit
+        return totalGas >= totalCost ? start : -1;
+    }
+    
+    // Jump Game - Check if can reach the end
+    // O(n) Time, O(1) Space
+    private static boolean canJumpToEnd(int[] nums) {
+        int maxReach = 0;
+        
+        for (int i = 0; i < nums.length; i++) {
+            if (i > maxReach) return false; // Can't reach this position
+            
+            maxReach = Math.max(maxReach, i + nums[i]);
+            
+            if (maxReach >= nums.length - 1) return true; // Can reach end
+        }
+        
+        return false;
+    }
+    
+    // Jump Game II - Minimum jumps to reach end
+    // O(n) Time, O(1) Space
+    private static int minimumJumps(int[] nums) {
+        if (nums.length <= 1) return 0;
+        
+        int jumps = 0;
+        int currentEnd = 0;
+        int farthest = 0;
+        
+        for (int i = 0; i < nums.length - 1; i++) {
+            farthest = Math.max(farthest, i + nums[i]);
+            
+            // If we've reached the end of current jump
+            if (i == currentEnd) {
+                jumps++;
+                currentEnd = farthest;
+                
+                // If we can reach the end from current position
+                if (currentEnd >= nums.length - 1) break;
+            }
+        }
+        
+        return jumps;
     }
 }
