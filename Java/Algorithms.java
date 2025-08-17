@@ -471,6 +471,89 @@ public class Algorithms {
             System.out.println("Node " + entry.getKey().val + ": " + entry.getValue());
         }
         System.out.println("Dijkstra's Algorithm Complete");
+
+        // Union-Find (Disjoint Set Union) Algorithm
+        // O(α(n)) Time for union and find operations (amortized)
+        // O(n) Space where α is the inverse Ackermann function (practically constant)
+        /*
+         * Use Cases:
+         * - Detecting cycles in undirected graphs
+         * - Finding connected components
+         * - Kruskal's minimum spanning tree algorithm
+         * - Dynamic connectivity problems
+         */
+        System.out.println("\nUnion-Find Algorithm:");
+        UnionFind uf = new UnionFind(6); // Create union-find for nodes 0-5
+        
+        // Add some connections (edges)
+        uf.union(0, 1);
+        uf.union(1, 2);
+        uf.union(3, 4);
+        
+        System.out.println("After unions (0,1), (1,2), (3,4):");
+        System.out.println("Are 0 and 2 connected? " + uf.isConnected(0, 2)); // true
+        System.out.println("Are 0 and 3 connected? " + uf.isConnected(0, 3)); // false
+        System.out.println("Number of components: " + uf.getComponentCount());
+        
+        // Connect two components
+        uf.union(2, 3);
+        System.out.println("\nAfter union (2,3):");
+        System.out.println("Are 0 and 4 connected? " + uf.isConnected(0, 4)); // true
+        System.out.println("Number of components: " + uf.getComponentCount());
+        
+        // Demonstrate cycle detection
+        int[][] edges = {{0, 1}, {1, 2}, {0, 2}}; // This creates a cycle
+        boolean hasCycle = detectCycleUsingUnionFind(edges, 3);
+        System.out.println("Graph with edges [(0,1), (1,2), (0,2)] has cycle: " + hasCycle);
+        
+        System.out.println("Union-Find Algorithm Complete");
+
+        // Prefix Tree (Trie) Implementation
+        // O(m) Time for insert, search, and startsWith operations where m is the length of the word
+        // O(ALPHABET_SIZE * N * M) Space where N is number of words and M is average length
+        /*
+         * Use Cases:
+         * - Auto-complete/suggestion systems
+         * - Spell checkers
+         * - IP routing (longest prefix matching)
+         * - Dictionary implementations
+         * - Word games (finding words with certain prefixes)
+         */
+        System.out.println("\nPrefix Tree (Trie) Algorithm:");
+        Trie trie = new Trie();
+        
+        // Insert words into the trie
+        String[] words = {"apple", "app", "application", "apply", "apartment", "ape"};
+        for (String word : words) {
+            trie.insert(word);
+        }
+        System.out.println("Inserted words: " + java.util.Arrays.toString(words));
+        
+        // Test search functionality
+        System.out.println("Search 'app': " + trie.search("app")); // true
+        System.out.println("Search 'appl': " + trie.search("appl")); // false
+        System.out.println("Search 'apple': " + trie.search("apple")); // true
+        System.out.println("Search 'application': " + trie.search("application")); // true
+        System.out.println("Search 'banana': " + trie.search("banana")); // false
+        
+        // Test prefix functionality
+        System.out.println("StartsWith 'app': " + trie.startsWith("app")); // true
+        System.out.println("StartsWith 'appl': " + trie.startsWith("appl")); // true
+        System.out.println("StartsWith 'apt': " + trie.startsWith("apt")); // false
+        System.out.println("StartsWith 'a': " + trie.startsWith("a")); // true
+        
+        // Get all words with a specific prefix
+        System.out.println("Words starting with 'app': " + trie.getWordsWithPrefix("app"));
+        System.out.println("Words starting with 'apa': " + trie.getWordsWithPrefix("apa"));
+        
+        // Delete a word
+        trie.delete("app");
+        System.out.println("After deleting 'app':");
+        System.out.println("Search 'app': " + trie.search("app")); // false
+        System.out.println("Search 'apple': " + trie.search("apple")); // true (still exists)
+        System.out.println("StartsWith 'app': " + trie.startsWith("app")); // true (apple still exists)
+        
+        System.out.println("Prefix Tree (Trie) Complete");
     }
 
     static class WeightedGraphNode {
@@ -545,6 +628,304 @@ public class Algorithms {
         }
         
         return distances;
+    }
+
+    // Union-Find (Disjoint Set Union) Data Structure
+    static class UnionFind {
+        private int[] parent;
+        private int[] rank;
+        private int componentCount;
+        
+        public UnionFind(int n) {
+            parent = new int[n];
+            rank = new int[n];
+            componentCount = n;
+            
+            // Initialize each node as its own parent (separate component)
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;
+                rank[i] = 0;
+            }
+        }
+        
+        // Find operation with path compression
+        // O(α(n)) amortized time complexity
+        public int find(int x) {
+            if (parent[x] != x) {
+                parent[x] = find(parent[x]); // Path compression
+            }
+            return parent[x];
+        }
+        
+        // Union operation with union by rank
+        // O(α(n)) amortized time complexity
+        public boolean union(int x, int y) {
+            int rootX = find(x);
+            int rootY = find(y);
+            
+            if (rootX == rootY) {
+                return false; // Already in same component
+            }
+            
+            // Union by rank: attach smaller tree under root of larger tree
+            if (rank[rootX] < rank[rootY]) {
+                parent[rootX] = rootY;
+            } else if (rank[rootX] > rank[rootY]) {
+                parent[rootY] = rootX;
+            } else {
+                parent[rootY] = rootX;
+                rank[rootX]++;
+            }
+            
+            componentCount--;
+            return true;
+        }
+        
+        // Check if two nodes are in the same component
+        public boolean isConnected(int x, int y) {
+            return find(x) == find(y);
+        }
+        
+        // Get the number of connected components
+        public int getComponentCount() {
+            return componentCount;
+        }
+        
+        // Get the size of the component containing x
+        public int getComponentSize(int x) {
+            int root = find(x);
+            int size = 0;
+            for (int i = 0; i < parent.length; i++) {
+                if (find(i) == root) {
+                    size++;
+                }
+            }
+            return size;
+        }
+    }
+
+    // Prefix Tree (Trie) Data Structure
+    static class Trie {
+        private TrieNode root;
+        
+        // TrieNode class representing each node in the trie
+        static class TrieNode {
+            private TrieNode[] children;
+            private boolean isEndOfWord;
+            private static final int ALPHABET_SIZE = 26; // for lowercase letters a-z
+            
+            public TrieNode() {
+                children = new TrieNode[ALPHABET_SIZE];
+                isEndOfWord = false;
+            }
+        }
+        
+        public Trie() {
+            root = new TrieNode();
+        }
+        
+        // Insert a word into the trie
+        // O(m) Time Complexity where m is the length of the word
+        public void insert(String word) {
+            if (word == null || word.isEmpty()) {
+                return;
+            }
+            
+            TrieNode current = root;
+            for (char ch : word.toCharArray()) {
+                int index = ch - 'a'; // Convert char to index (0-25)
+                
+                if (current.children[index] == null) {
+                    current.children[index] = new TrieNode();
+                }
+                
+                current = current.children[index];
+            }
+            
+            current.isEndOfWord = true;
+        }
+        
+        // Search for a complete word in the trie
+        // O(m) Time Complexity where m is the length of the word
+        public boolean search(String word) {
+            if (word == null || word.isEmpty()) {
+                return false;
+            }
+            
+            TrieNode current = root;
+            for (char ch : word.toCharArray()) {
+                int index = ch - 'a';
+                
+                if (current.children[index] == null) {
+                    return false;
+                }
+                
+                current = current.children[index];
+            }
+            
+            return current.isEndOfWord;
+        }
+        
+        // Check if any word in the trie starts with the given prefix
+        // O(m) Time Complexity where m is the length of the prefix
+        public boolean startsWith(String prefix) {
+            if (prefix == null || prefix.isEmpty()) {
+                return true;
+            }
+            
+            TrieNode current = root;
+            for (char ch : prefix.toCharArray()) {
+                int index = ch - 'a';
+                
+                if (current.children[index] == null) {
+                    return false;
+                }
+                
+                current = current.children[index];
+            }
+            
+            return true;
+        }
+        
+        // Get all words that start with the given prefix
+        public List<String> getWordsWithPrefix(String prefix) {
+            List<String> result = new ArrayList<>();
+            
+            if (prefix == null) {
+                return result;
+            }
+            
+            TrieNode current = root;
+            
+            // Navigate to the end of the prefix
+            for (char ch : prefix.toCharArray()) {
+                int index = ch - 'a';
+                
+                if (current.children[index] == null) {
+                    return result; // No words with this prefix
+                }
+                
+                current = current.children[index];
+            }
+            
+            // Perform DFS to find all words starting from this node
+            dfsCollectWords(current, prefix, result);
+            return result;
+        }
+        
+        // Helper method for DFS to collect all words from a given node
+        private void dfsCollectWords(TrieNode node, String currentWord, List<String> result) {
+            if (node.isEndOfWord) {
+                result.add(currentWord);
+            }
+            
+            for (int i = 0; i < TrieNode.ALPHABET_SIZE; i++) {
+                if (node.children[i] != null) {
+                    char nextChar = (char) ('a' + i);
+                    dfsCollectWords(node.children[i], currentWord + nextChar, result);
+                }
+            }
+        }
+        
+        // Delete a word from the trie
+        // O(m) Time Complexity where m is the length of the word
+        public boolean delete(String word) {
+            if (word == null || word.isEmpty()) {
+                return false;
+            }
+            
+            return deleteHelper(root, word, 0);
+        }
+        
+        // Helper method for deletion with recursion
+        private boolean deleteHelper(TrieNode current, String word, int index) {
+            if (index == word.length()) {
+                // We've reached the end of the word
+                if (!current.isEndOfWord) {
+                    return false; // Word doesn't exist
+                }
+                
+                current.isEndOfWord = false;
+                
+                // Return true if current node has no children (can be deleted)
+                return !hasChildren(current);
+            }
+            
+            char ch = word.charAt(index);
+            int charIndex = ch - 'a';
+            TrieNode node = current.children[charIndex];
+            
+            if (node == null) {
+                return false; // Word doesn't exist
+            }
+            
+            boolean shouldDeleteChild = deleteHelper(node, word, index + 1);
+            
+            if (shouldDeleteChild) {
+                current.children[charIndex] = null;
+                
+                // Return true if current node has no children and is not end of another word
+                return !current.isEndOfWord && !hasChildren(current);
+            }
+            
+            return false;
+        }
+        
+        // Helper method to check if a node has any children
+        private boolean hasChildren(TrieNode node) {
+            for (TrieNode child : node.children) {
+                if (child != null) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        // Get the total number of words in the trie
+        public int countWords() {
+            return countWordsHelper(root);
+        }
+        
+        // Helper method to count words recursively
+        private int countWordsHelper(TrieNode node) {
+            int count = 0;
+            
+            if (node.isEndOfWord) {
+                count = 1;
+            }
+            
+            for (TrieNode child : node.children) {
+                if (child != null) {
+                    count += countWordsHelper(child);
+                }
+            }
+            
+            return count;
+        }
+        
+        // Check if the trie is empty
+        public boolean isEmpty() {
+            return countWords() == 0;
+        }
+    }
+
+    // Helper method: Detect cycle in undirected graph using Union-Find
+    private static boolean detectCycleUsingUnionFind(int[][] edges, int n) {
+        UnionFind uf = new UnionFind(n);
+        
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            
+            // If both vertices are already in same component, adding this edge creates a cycle
+            if (uf.isConnected(u, v)) {
+                return true;
+            }
+            
+            uf.union(u, v);
+        }
+        
+        return false;
     }
 
     private static TreeNode dfs(TreeNode root, int target) {
