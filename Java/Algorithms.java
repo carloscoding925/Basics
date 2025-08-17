@@ -40,6 +40,7 @@ public class Algorithms {
         advancedTopics();
         stacks();
         queues();
+        bitManipulation();
     }
 
     static class ListNode {
@@ -2443,5 +2444,290 @@ public class Algorithms {
         }
         
         return count;
+    }
+
+    private static void bitManipulation() {
+        // Bit Manipulation Algorithms
+        // Fundamental operations for efficient computation and problem solving
+        /*
+         * Common Use Cases:
+         * - Set/check/clear/toggle specific bits
+         * - Check if number is power of 2
+         * - Count number of 1 bits (population count)
+         * - Find single number in array where others appear twice
+         * - Subset generation using bit masks
+         * - Fast multiplication/division by powers of 2
+         */
+        System.out.println("Bit Manipulation Algorithms:");
+        
+        // Basic Bit Operations
+        int num = 12; // Binary: 1100
+        System.out.println("Number: " + num + " (Binary: " + Integer.toBinaryString(num) + ")");
+        
+        // Check if bit at position i is set
+        int position = 2;
+        boolean isBitSet = (num & (1 << position)) != 0;
+        System.out.println("Bit at position " + position + " is set: " + isBitSet);
+        
+        // Set bit at position i
+        int setBit = num | (1 << position);
+        System.out.println("After setting bit at position " + position + ": " + setBit + " (Binary: " + Integer.toBinaryString(setBit) + ")");
+        
+        // Clear bit at position i
+        int clearBit = num & ~(1 << position);
+        System.out.println("After clearing bit at position " + position + ": " + clearBit + " (Binary: " + Integer.toBinaryString(clearBit) + ")");
+        
+        // Toggle bit at position i
+        int toggleBit = num ^ (1 << position);
+        System.out.println("After toggling bit at position " + position + ": " + toggleBit + " (Binary: " + Integer.toBinaryString(toggleBit) + ")");
+        
+        // Check if number is power of 2
+        // O(1) Time, O(1) Space
+        int[] powerOfTwoTests = {1, 2, 3, 4, 8, 15, 16, 32};
+        System.out.println("\nPower of 2 checks:");
+        for (int n : powerOfTwoTests) {
+            boolean isPowerOfTwo = isPowerOfTwo(n);
+            System.out.println(n + " is power of 2: " + isPowerOfTwo);
+        }
+        
+        // Count number of 1 bits (Hamming Weight)
+        // O(number of 1 bits) Time, O(1) Space
+        int[] hammingTests = {5, 11, 15, 128};
+        System.out.println("\nCounting 1 bits:");
+        for (int n : hammingTests) {
+            int count = hammingWeight(n);
+            System.out.println(n + " (Binary: " + Integer.toBinaryString(n) + ") has " + count + " one bits");
+        }
+        
+        // Find single number (XOR trick)
+        // O(n) Time, O(1) Space
+        int[] singleNumberArray = {2, 2, 1, 3, 3, 4, 4};
+        int singleNum = findSingleNumber(singleNumberArray);
+        System.out.println("\nIn array " + java.util.Arrays.toString(singleNumberArray) + ", single number is: " + singleNum);
+        
+        // Generate all subsets using bit manipulation
+        // O(2^n * n) Time, O(2^n * n) Space for output
+        int[] subsetArray = {1, 2, 3};
+        List<List<Integer>> allSubsets = generateSubsetsBitwise(subsetArray);
+        System.out.println("\nAll subsets of " + java.util.Arrays.toString(subsetArray) + ":");
+        for (List<Integer> subset : allSubsets) {
+            System.out.println(subset);
+        }
+        
+        // Reverse bits of a 32-bit integer
+        // O(1) Time, O(1) Space
+        int reverseTest = 43261596; // Binary: 00000010100101000001111010011100
+        int reversed = reverseBits(reverseTest);
+        System.out.println("\nReverse bits:");
+        System.out.println("Original: " + reverseTest + " (Binary: " + String.format("%32s", Integer.toBinaryString(reverseTest)).replace(' ', '0') + ")");
+        System.out.println("Reversed: " + reversed + " (Binary: " + String.format("%32s", Integer.toBinaryString(reversed)).replace(' ', '0') + ")");
+        
+        // Find missing number using XOR
+        // O(n) Time, O(1) Space
+        int[] missingArray = {3, 0, 1}; // Missing 2 from range [0, 3]
+        int missingNum = findMissingNumber(missingArray);
+        System.out.println("\nIn array " + java.util.Arrays.toString(missingArray) + ", missing number is: " + missingNum);
+        
+        // Fast multiplication and division by powers of 2
+        int fastNum = 20;
+        System.out.println("\nFast operations on " + fastNum + ":");
+        System.out.println("Multiply by 4 (left shift 2): " + (fastNum << 2));
+        System.out.println("Divide by 4 (right shift 2): " + (fastNum >> 2));
+        System.out.println("Multiply by 8 (left shift 3): " + (fastNum << 3));
+        System.out.println("Divide by 8 (right shift 3): " + (fastNum >> 3));
+        
+        // Get rightmost set bit
+        int rightmostTest = 12; // Binary: 1100
+        int rightmostSetBit = getRightmostSetBit(rightmostTest);
+        System.out.println("\nRightmost set bit of " + rightmostTest + " (Binary: " + Integer.toBinaryString(rightmostTest) + ") is at position: " + rightmostSetBit);
+        
+        // Check if two numbers have opposite signs
+        int num1 = 5, num2 = -3;
+        boolean oppositeSigns = haveOppositeSigns(num1, num2);
+        System.out.println("\nNumbers " + num1 + " and " + num2 + " have opposite signs: " + oppositeSigns);
+        
+        // Swap two numbers without using temporary variable
+        int a = 10, b = 20;
+        System.out.println("\nBefore swap: a = " + a + ", b = " + b);
+        int[] swapped = swapWithoutTemp(a, b);
+        System.out.println("After swap: a = " + swapped[0] + ", b = " + swapped[1]);
+        
+        System.out.println("\nBit Manipulation Complete");
+    }
+    
+    // Check if number is power of 2
+    // O(1) Time, O(1) Space
+    private static boolean isPowerOfTwo(int n) {
+        // A power of 2 has exactly one bit set
+        // n & (n-1) removes the rightmost set bit
+        // For power of 2, this should result in 0
+        return n > 0 && (n & (n - 1)) == 0;
+    }
+    
+    // Count number of 1 bits (Hamming Weight)
+    // O(number of 1 bits) Time, O(1) Space
+    private static int hammingWeight(int n) {
+        int count = 0;
+        while (n != 0) {
+            // Remove the rightmost set bit
+            n = n & (n - 1);
+            count++;
+        }
+        return count;
+    }
+    
+    // Alternative implementation using Brian Kernighan's algorithm
+    private static int hammingWeightAlternative(int n) {
+        int count = 0;
+        while (n != 0) {
+            count += n & 1; // Add 1 if rightmost bit is set
+            n >>>= 1; // Unsigned right shift
+        }
+        return count;
+    }
+    
+    // Find single number where all others appear twice
+    // O(n) Time, O(1) Space
+    private static int findSingleNumber(int[] nums) {
+        int result = 0;
+        // XOR all numbers - duplicates will cancel out
+        for (int num : nums) {
+            result ^= num;
+        }
+        return result;
+    }
+    
+    // Generate all subsets using bit manipulation
+    // O(2^n * n) Time, O(2^n * n) Space for output
+    private static List<List<Integer>> generateSubsetsBitwise(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        int n = nums.length;
+        int totalSubsets = 1 << n; // 2^n
+        
+        // Generate all possible bit masks from 0 to 2^n - 1
+        for (int mask = 0; mask < totalSubsets; mask++) {
+            List<Integer> subset = new ArrayList<>();
+            
+            // Check each bit position
+            for (int i = 0; i < n; i++) {
+                // If bit at position i is set, include nums[i]
+                if ((mask & (1 << i)) != 0) {
+                    subset.add(nums[i]);
+                }
+            }
+            
+            result.add(subset);
+        }
+        
+        return result;
+    }
+    
+    // Reverse bits of a 32-bit unsigned integer
+    // O(1) Time, O(1) Space
+    private static int reverseBits(int n) {
+        int result = 0;
+        
+        for (int i = 0; i < 32; i++) {
+            // Get the rightmost bit of n
+            int bit = n & 1;
+            
+            // Shift result left and add the bit
+            result = (result << 1) | bit;
+            
+            // Shift n right to process next bit
+            n >>>= 1;
+        }
+        
+        return result;
+    }
+    
+    // Find missing number in array containing n distinct numbers in range [0, n]
+    // O(n) Time, O(1) Space
+    private static int findMissingNumber(int[] nums) {
+        int n = nums.length;
+        int expectedXor = 0;
+        int actualXor = 0;
+        
+        // XOR all numbers from 0 to n
+        for (int i = 0; i <= n; i++) {
+            expectedXor ^= i;
+        }
+        
+        // XOR all numbers in array
+        for (int num : nums) {
+            actualXor ^= num;
+        }
+        
+        // Missing number is the XOR of expected and actual
+        return expectedXor ^ actualXor;
+    }
+    
+    // Get position of rightmost set bit (1-indexed)
+    // O(1) Time, O(1) Space
+    private static int getRightmostSetBit(int n) {
+        if (n == 0) return -1; // No set bits
+        
+        // n & (-n) isolates the rightmost set bit
+        int rightmostBit = n & (-n);
+        
+        // Count position (1-indexed)
+        int position = 1;
+        while (rightmostBit > 1) {
+            rightmostBit >>= 1;
+            position++;
+        }
+        
+        return position;
+    }
+    
+    // Check if two integers have opposite signs
+    // O(1) Time, O(1) Space
+    private static boolean haveOppositeSigns(int x, int y) {
+        // XOR of two numbers with opposite signs will have MSB set
+        return (x ^ y) < 0;
+    }
+    
+    // Swap two numbers without using temporary variable
+    // O(1) Time, O(1) Space
+    private static int[] swapWithoutTemp(int a, int b) {
+        // Using XOR swap
+        a = a ^ b;
+        b = a ^ b; // b = (a ^ b) ^ b = a
+        a = a ^ b; // a = (a ^ b) ^ a = b
+        
+        return new int[]{a, b};
+    }
+    
+    // Alternative swap using arithmetic (watch out for overflow)
+    private static int[] swapArithmetic(int a, int b) {
+        a = a + b;
+        b = a - b; // b = (a + b) - b = a
+        a = a - b; // a = (a + b) - a = b
+        
+        return new int[]{a, b};
+    }
+    
+    // Check if a number is even or odd using bit manipulation
+    // O(1) Time, O(1) Space
+    private static boolean isEven(int n) {
+        return (n & 1) == 0;
+    }
+    
+    // Turn off the rightmost set bit
+    // O(1) Time, O(1) Space
+    private static int turnOffRightmostSetBit(int n) {
+        return n & (n - 1);
+    }
+    
+    // Turn on the rightmost unset bit
+    // O(1) Time, O(1) Space
+    private static int turnOnRightmostUnsetBit(int n) {
+        return n | (n + 1);
+    }
+    
+    // Check if only one bit is set (power of 2 check)
+    // O(1) Time, O(1) Space
+    private static boolean hasOnlyOneBitSet(int n) {
+        return n > 0 && (n & (n - 1)) == 0;
     }
 }
