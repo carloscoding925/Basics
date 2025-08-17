@@ -69,6 +69,7 @@ public class Algorithms {
         sets();
         maps();
         graphsAndTrees();
+        dynamicProgramming();
     }
 
     private static void arraysAndLists() {
@@ -458,6 +459,90 @@ public class Algorithms {
         Set<GraphNode> dfsVisited = new HashSet<>();
         dfsGraph(node1, dfsVisited);
         System.out.println("Graph DFS Complete");
+
+        // Dijkstra's Algorithm - Shortest Path in Weighted Graph
+        // O((V + E) log V) Time, O(V) Space
+        WeightedGraphNode sourceNode = createWeightedGraph();
+        Map<WeightedGraphNode, Integer> shortestDistances = dijkstra(sourceNode);
+        System.out.println("Dijkstra's shortest distances from source:");
+        for (Map.Entry<WeightedGraphNode, Integer> entry : shortestDistances.entrySet()) {
+            System.out.println("Node " + entry.getKey().val + ": " + entry.getValue());
+        }
+        System.out.println("Dijkstra's Algorithm Complete");
+    }
+
+    static class WeightedGraphNode {
+        int val;
+        List<Edge> neighbors;
+
+        WeightedGraphNode(int val) {
+            this.val = val;
+            this.neighbors = new ArrayList<>();
+        }
+    }
+
+    static class Edge {
+        WeightedGraphNode node;
+        int weight;
+
+        Edge(WeightedGraphNode node, int weight) {
+            this.node = node;
+            this.weight = weight;
+        }
+    }
+
+    private static WeightedGraphNode createWeightedGraph() {
+        WeightedGraphNode node1 = new WeightedGraphNode(1);
+        WeightedGraphNode node2 = new WeightedGraphNode(2);
+        WeightedGraphNode node3 = new WeightedGraphNode(3);
+        WeightedGraphNode node4 = new WeightedGraphNode(4);
+
+        // Create weighted edges
+        node1.neighbors.add(new Edge(node2, 4));
+        node1.neighbors.add(new Edge(node3, 2));
+        node2.neighbors.add(new Edge(node4, 3));
+        node3.neighbors.add(new Edge(node2, 1));
+        node3.neighbors.add(new Edge(node4, 5));
+
+        return node1; // Return source node
+    }
+
+    private static Map<WeightedGraphNode, Integer> dijkstra(WeightedGraphNode source) {
+        Map<WeightedGraphNode, Integer> distances = new HashMap<>();
+        Set<WeightedGraphNode> visited = new HashSet<>();
+        
+        // Priority queue to always process the node with minimum distance
+        Queue<WeightedGraphNode> pq = new java.util.PriorityQueue<>((a, b) -> 
+            distances.getOrDefault(a, Integer.MAX_VALUE) - distances.getOrDefault(b, Integer.MAX_VALUE));
+        
+        // Initialize distances
+        distances.put(source, 0);
+        pq.offer(source);
+        
+        while (!pq.isEmpty()) {
+            WeightedGraphNode current = pq.poll();
+            
+            if (visited.contains(current)) {
+                continue;
+            }
+            
+            visited.add(current);
+            int currentDistance = distances.get(current);
+            
+            // Check all neighbors
+            for (Edge edge : current.neighbors) {
+                WeightedGraphNode neighbor = edge.node;
+                int newDistance = currentDistance + edge.weight;
+                
+                // If we found a shorter path, update it
+                if (newDistance < distances.getOrDefault(neighbor, Integer.MAX_VALUE)) {
+                    distances.put(neighbor, newDistance);
+                    pq.offer(neighbor);
+                }
+            }
+        }
+        
+        return distances;
     }
 
     private static TreeNode dfs(TreeNode root, int target) {
@@ -493,5 +578,126 @@ public class Algorithms {
             visited.add(neighbor);
             dfsGraph(neighbor, visited);
         }
+    }
+
+    private static void dynamicProgramming() {
+        // Fibonacci Sequence - Classic DP Example
+        // O(n) Time, O(1) Space (optimized)
+        int n = 10;
+        int fibResult = fibonacci(n);
+        System.out.println("Fibonacci of " + n + ": " + fibResult);
+
+        // Climbing Stairs - How many ways to reach step n
+        // O(n) Time, O(1) Space
+        int steps = 5;
+        int waysToClimb = climbStairs(steps);
+        System.out.println("Ways to climb " + steps + " stairs: " + waysToClimb);
+
+        // Coin Change - Minimum coins needed to make amount
+        // O(amount * coins.length) Time, O(amount) Space
+        int[] coins = {1, 3, 4};
+        int amount = 6;
+        int minCoins = coinChange(coins, amount);
+        System.out.println("Minimum coins to make " + amount + ": " + minCoins);
+
+        // Longest Common Subsequence
+        // O(m * n) Time, O(m * n) Space
+        String text1 = "abcde";
+        String text2 = "ace";
+        int lcsLength = longestCommonSubsequence(text1, text2);
+        System.out.println("LCS length of '" + text1 + "' and '" + text2 + "': " + lcsLength);
+
+        // Maximum Subarray Sum (Kadane's Algorithm)
+        // O(n) Time, O(1) Space
+        int[] array = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+        int maxSum = maxSubarraySum(array);
+        System.out.println("Maximum subarray sum: " + maxSum);
+
+        // House Robber - Maximum money without robbing adjacent houses
+        // O(n) Time, O(1) Space
+        int[] houses = {2, 7, 9, 3, 1};
+        int maxRobbed = rob(houses);
+        System.out.println("Maximum money robbed: " + maxRobbed);
+
+        System.out.println("Dynamic Programming Complete");
+    }
+
+    private static int fibonacci(int n) {
+        if (n <= 1) return n;
+        
+        int prev2 = 0, prev1 = 1;
+        for (int i = 2; i <= n; i++) {
+            int current = prev1 + prev2;
+            prev2 = prev1;
+            prev1 = current;
+        }
+        return prev1;
+    }
+
+    private static int climbStairs(int n) {
+        if (n <= 2) return n;
+        
+        int oneStep = 1, twoSteps = 2;
+        for (int i = 3; i <= n; i++) {
+            int current = oneStep + twoSteps;
+            oneStep = twoSteps;
+            twoSteps = current;
+        }
+        return twoSteps;
+    }
+
+    private static int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        java.util.Arrays.fill(dp, amount + 1);
+        dp[0] = 0;
+        
+        for (int i = 1; i <= amount; i++) {
+            for (int coin : coins) {
+                if (coin <= i) {
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                }
+            }
+        }
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+
+    private static int longestCommonSubsequence(String text1, String text2) {
+        int m = text1.length(), n = text2.length();
+        int[][] dp = new int[m + 1][n + 1];
+        
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+
+    private static int maxSubarraySum(int[] nums) {
+        int maxSoFar = nums[0];
+        int maxEndingHere = nums[0];
+        
+        for (int i = 1; i < nums.length; i++) {
+            maxEndingHere = Math.max(nums[i], maxEndingHere + nums[i]);
+            maxSoFar = Math.max(maxSoFar, maxEndingHere);
+        }
+        return maxSoFar;
+    }
+
+    private static int rob(int[] nums) {
+        if (nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        
+        int prev2 = 0, prev1 = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            int current = Math.max(prev1, prev2 + nums[i]);
+            prev2 = prev1;
+            prev1 = current;
+        }
+        return prev1;
     }
 }
