@@ -27,40 +27,6 @@ import java.util.Set;
 
 public class Algorithms {
 
-    static class ListNode {
-        int val;
-        ListNode next = null;
-
-        ListNode() {}
-        ListNode(int val) { this.val = val; }
-        ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-    }
-
-    static class TreeNode {
-        int val;
-        List<TreeNode> children;
-
-        TreeNode(int val) {
-            this.val = val;
-            this.children = new ArrayList<>();
-        }
-
-        TreeNode(int val, List<TreeNode> children) {
-            this.val = val;
-            this.children = children;
-        }
-    }
-
-    static class GraphNode {
-        int val;
-        List<GraphNode> neighbors;
-
-        GraphNode(int val) {
-            this.val = val;
-            this.neighbors = new ArrayList<>();
-        }
-    }
-
     public static void main(String[] args) {
         System.out.println("Entry Point");
 
@@ -72,6 +38,15 @@ public class Algorithms {
         dynamicProgramming();
         sorting();
         advancedTopics();
+    }
+
+    static class ListNode {
+        int val;
+        ListNode next = null;
+
+        ListNode() {}
+        ListNode(int val) { this.val = val; }
+        ListNode(int val, ListNode next) { this.val = val; this.next = next; }
     }
 
     private static void arraysAndLists() {
@@ -342,6 +317,31 @@ public class Algorithms {
             else {
                 integerMap.put(nums[i], i);
             }
+        }
+    }
+
+    static class TreeNode {
+        int val;
+        List<TreeNode> children;
+
+        TreeNode(int val) {
+            this.val = val;
+            this.children = new ArrayList<>();
+        }
+
+        TreeNode(int val, List<TreeNode> children) {
+            this.val = val;
+            this.children = children;
+        }
+    }
+
+    static class GraphNode {
+        int val;
+        List<GraphNode> neighbors;
+
+        GraphNode(int val) {
+            this.val = val;
+            this.neighbors = new ArrayList<>();
         }
     }
 
