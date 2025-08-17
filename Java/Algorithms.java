@@ -38,6 +38,8 @@ public class Algorithms {
         dynamicProgramming();
         sorting();
         advancedTopics();
+        stacks();
+        queues();
     }
 
     static class ListNode {
@@ -2025,5 +2027,421 @@ public class Algorithms {
             // Unchoose (backtrack)
             current.remove(current.size() - 1);
         }
+    }
+
+    private static void stacks() {
+        // Stack Data Structure - LIFO (Last In, First Out)
+        // O(1) for push, pop, peek operations
+        /*
+         * Use Cases:
+         * - Function call management (call stack)
+         * - Undo operations in applications
+         * - Expression evaluation and syntax parsing
+         * - Backtracking algorithms
+         * - Browser history navigation
+         */
+        System.out.println("Stack Algorithms:");
+        
+        // Example 1: Valid Parentheses
+        // O(n) Time, O(n) Space
+        String[] testExpressions = {"()", "()[]{}", "(]", "([)]", "{[]}"};
+        System.out.println("Testing Valid Parentheses:");
+        for (String expr : testExpressions) {
+            boolean isValid = isValidParentheses(expr);
+            System.out.println("'" + expr + "' is valid: " + isValid);
+        }
+        
+        // Example 2: Evaluate Reverse Polish Notation (RPN)
+        // O(n) Time, O(n) Space
+        String[] rpnTokens = {"2", "1", "+", "3", "*"}; // ((2 + 1) * 3) = 9
+        int rpnResult = evaluateRPN(rpnTokens);
+        System.out.println("RPN evaluation of " + java.util.Arrays.toString(rpnTokens) + " = " + rpnResult);
+        
+        // Example 3: Daily Temperatures (Next Greater Element)
+        // O(n) Time, O(n) Space
+        int[] temperatures = {73, 74, 75, 71, 69, 72, 76, 73};
+        int[] waitDays = dailyTemperatures(temperatures);
+        System.out.println("Temperatures: " + java.util.Arrays.toString(temperatures));
+        System.out.println("Days to wait for warmer weather: " + java.util.Arrays.toString(waitDays));
+        
+        // Example 4: Largest Rectangle in Histogram
+        // O(n) Time, O(n) Space
+        int[] heights = {2, 1, 5, 6, 2, 3};
+        int maxArea = largestRectangleArea(heights);
+        System.out.println("Heights: " + java.util.Arrays.toString(heights));
+        System.out.println("Largest rectangle area: " + maxArea);
+        
+        // Example 5: Simplify Path (Unix-style path)
+        // O(n) Time, O(n) Space
+        String[] paths = {"/home/", "/a/./b/../../c/", "/a/../../b/../c//.//", "/a//b////c/d//././/.."};
+        System.out.println("Path Simplification:");
+        for (String path : paths) {
+            String simplified = simplifyPath(path);
+            System.out.println("'" + path + "' -> '" + simplified + "'");
+        }
+        
+        System.out.println("Stack Algorithms Complete");
+    }
+
+    private static void queues() {
+        // Queue Data Structure - FIFO (First In, First Out)
+        // O(1) for offer/enqueue, poll/dequeue, peek operations
+        /*
+         * Use Cases:
+         * - Task scheduling and process management
+         * - Breadth-First Search (BFS) traversal
+         * - Level-order tree traversal
+         * - Handling requests in web servers
+         * - Buffer for data streams
+         */
+        System.out.println("\nQueue Algorithms:");
+        
+        // Example 1: Binary Tree Level Order Traversal
+        // O(n) Time, O(w) Space where w is maximum width
+        System.out.println("Binary Tree Level Order Traversal:");
+        BinaryTreeNode root = createSampleBinaryTree();
+        List<List<Integer>> levelOrder = levelOrderTraversal(root);
+        System.out.println("Level order traversal: " + levelOrder);
+        
+        // Example 2: Sliding Window Maximum
+        // O(n) Time, O(k) Space using deque
+        int[] nums = {1, 3, -1, -3, 5, 3, 6, 7};
+        int k = 3;
+        int[] maxSlidingWindow = maxSlidingWindow(nums, k);
+        System.out.println("Array: " + java.util.Arrays.toString(nums));
+        System.out.println("Sliding window maximum (k=" + k + "): " + java.util.Arrays.toString(maxSlidingWindow));
+        
+        // Example 3: First Unique Character in String
+        // O(n) Time, O(1) Space (limited alphabet)
+        String[] testStrings = {"leetcode", "loveleetcode", "aabb"};
+        System.out.println("First Unique Character:");
+        for (String s : testStrings) {
+            int firstUnique = firstUniqueChar(s);
+            if (firstUnique != -1) {
+                System.out.println("'" + s + "': first unique char is '" + s.charAt(firstUnique) + "' at index " + firstUnique);
+            } else {
+                System.out.println("'" + s + "': no unique character found");
+            }
+        }
+        
+        // Example 4: Design Hit Counter
+        // O(1) amortized for hit(), O(300) for getHits()
+        System.out.println("Hit Counter Design:");
+        HitCounter hitCounter = new HitCounter();
+        hitCounter.hit(1);
+        hitCounter.hit(2);
+        hitCounter.hit(3);
+        System.out.println("Hits at timestamp 4: " + hitCounter.getHits(4)); // Should be 3
+        hitCounter.hit(300);
+        System.out.println("Hits at timestamp 300: " + hitCounter.getHits(300)); // Should be 4
+        System.out.println("Hits at timestamp 301: " + hitCounter.getHits(301)); // Should be 3 (first hit expired)
+        
+        // Example 5: Number of Islands (BFS approach)
+        // O(m*n) Time, O(min(m,n)) Space
+        char[][] grid = {
+            {'1','1','1','1','0'},
+            {'1','1','0','1','0'},
+            {'1','1','0','0','0'},
+            {'0','0','0','0','0'}
+        };
+        int numIslands = numIslands(grid);
+        System.out.println("Number of islands in grid: " + numIslands);
+        
+        System.out.println("Queue Algorithms Complete");
+    }
+
+    // Stack Algorithm Implementations
+    
+    // Valid Parentheses - Check if parentheses are properly balanced
+    // O(n) Time, O(n) Space
+    private static boolean isValidParentheses(String s) {
+        java.util.Stack<Character> stack = new java.util.Stack<>();
+        
+        for (char c : s.toCharArray()) {
+            if (c == '(' || c == '[' || c == '{') {
+                stack.push(c);
+            } else if (c == ')' || c == ']' || c == '}') {
+                if (stack.isEmpty()) {
+                    return false;
+                }
+                
+                char top = stack.pop();
+                if ((c == ')' && top != '(') ||
+                    (c == ']' && top != '[') ||
+                    (c == '}' && top != '{')) {
+                    return false;
+                }
+            }
+        }
+        
+        return stack.isEmpty();
+    }
+    
+    // Evaluate Reverse Polish Notation
+    // O(n) Time, O(n) Space
+    private static int evaluateRPN(String[] tokens) {
+        java.util.Stack<Integer> stack = new java.util.Stack<>();
+        
+        for (String token : tokens) {
+            if (token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/")) {
+                int b = stack.pop();
+                int a = stack.pop();
+                
+                switch (token) {
+                    case "+": stack.push(a + b); break;
+                    case "-": stack.push(a - b); break;
+                    case "*": stack.push(a * b); break;
+                    case "/": stack.push(a / b); break;
+                }
+            } else {
+                stack.push(Integer.parseInt(token));
+            }
+        }
+        
+        return stack.pop();
+    }
+    
+    // Daily Temperatures - Find next warmer temperature
+    // O(n) Time, O(n) Space
+    private static int[] dailyTemperatures(int[] temperatures) {
+        int n = temperatures.length;
+        int[] result = new int[n];
+        java.util.Stack<Integer> stack = new java.util.Stack<>(); // Store indices
+        
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && temperatures[i] > temperatures[stack.peek()]) {
+                int index = stack.pop();
+                result[index] = i - index;
+            }
+            stack.push(i);
+        }
+        
+        return result;
+    }
+    
+    // Largest Rectangle in Histogram
+    // O(n) Time, O(n) Space
+    private static int largestRectangleArea(int[] heights) {
+        java.util.Stack<Integer> stack = new java.util.Stack<>();
+        int maxArea = 0;
+        int n = heights.length;
+        
+        for (int i = 0; i <= n; i++) {
+            int currentHeight = (i == n) ? 0 : heights[i];
+            
+            while (!stack.isEmpty() && currentHeight < heights[stack.peek()]) {
+                int height = heights[stack.pop()];
+                int width = stack.isEmpty() ? i : i - stack.peek() - 1;
+                maxArea = Math.max(maxArea, height * width);
+            }
+            
+            stack.push(i);
+        }
+        
+        return maxArea;
+    }
+    
+    // Simplify Unix-style Path
+    // O(n) Time, O(n) Space
+    private static String simplifyPath(String path) {
+        java.util.Stack<String> stack = new java.util.Stack<>();
+        String[] components = path.split("/");
+        
+        for (String component : components) {
+            if (component.equals("..")) {
+                if (!stack.isEmpty()) {
+                    stack.pop();
+                }
+            } else if (!component.equals(".") && !component.isEmpty()) {
+                stack.push(component);
+            }
+        }
+        
+        StringBuilder result = new StringBuilder();
+        for (String dir : stack) {
+            result.append("/").append(dir);
+        }
+        
+        return result.length() > 0 ? result.toString() : "/";
+    }
+
+    // Queue Algorithm Implementations
+    
+    // Binary Tree Node for level order traversal
+    static class BinaryTreeNode {
+        int val;
+        BinaryTreeNode left;
+        BinaryTreeNode right;
+        
+        BinaryTreeNode(int val) {
+            this.val = val;
+        }
+        
+        BinaryTreeNode(int val, BinaryTreeNode left, BinaryTreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+    
+    // Create a sample binary tree for testing
+    private static BinaryTreeNode createSampleBinaryTree() {
+        // Create tree:     3
+        //                 / \
+        //                9   20
+        //                   /  \
+        //                  15   7
+        return new BinaryTreeNode(3,
+            new BinaryTreeNode(9),
+            new BinaryTreeNode(20,
+                new BinaryTreeNode(15),
+                new BinaryTreeNode(7)
+            )
+        );
+    }
+    
+    // Binary Tree Level Order Traversal
+    // O(n) Time, O(w) Space where w is maximum width
+    private static List<List<Integer>> levelOrderTraversal(BinaryTreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) return result;
+        
+        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        
+        while (!queue.isEmpty()) {
+            int levelSize = queue.size();
+            List<Integer> currentLevel = new ArrayList<>();
+            
+            for (int i = 0; i < levelSize; i++) {
+                BinaryTreeNode node = queue.poll();
+                currentLevel.add(node.val);
+                
+                if (node.left != null) queue.offer(node.left);
+                if (node.right != null) queue.offer(node.right);
+            }
+            
+            result.add(currentLevel);
+        }
+        
+        return result;
+    }
+    
+    // Sliding Window Maximum using Deque
+    // O(n) Time, O(k) Space
+    private static int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums == null || nums.length == 0 || k <= 0) return new int[0];
+        
+        int n = nums.length;
+        int[] result = new int[n - k + 1];
+        java.util.Deque<Integer> deque = new java.util.ArrayDeque<>(); // Store indices
+        
+        for (int i = 0; i < n; i++) {
+            // Remove indices outside the current window
+            while (!deque.isEmpty() && deque.peekFirst() < i - k + 1) {
+                deque.pollFirst();
+            }
+            
+            // Remove indices whose corresponding values are smaller than current
+            while (!deque.isEmpty() && nums[deque.peekLast()] < nums[i]) {
+                deque.pollLast();
+            }
+            
+            deque.offerLast(i);
+            
+            // Add to result if window is complete
+            if (i >= k - 1) {
+                result[i - k + 1] = nums[deque.peekFirst()];
+            }
+        }
+        
+        return result;
+    }
+    
+    // First Unique Character in String
+    // O(n) Time, O(1) Space (26 letters)
+    private static int firstUniqueChar(String s) {
+        // Count frequency of each character
+        int[] count = new int[26];
+        for (char c : s.toCharArray()) {
+            count[c - 'a']++;
+        }
+        
+        // Find first character with frequency 1
+        for (int i = 0; i < s.length(); i++) {
+            if (count[s.charAt(i) - 'a'] == 1) {
+                return i;
+            }
+        }
+        
+        return -1;
+    }
+    
+    // Hit Counter Design - Count hits in last 300 seconds
+    static class HitCounter {
+        private Queue<Integer> hits;
+        
+        public HitCounter() {
+            hits = new LinkedList<>();
+        }
+        
+        // Record a hit at timestamp
+        // O(1) Time
+        public void hit(int timestamp) {
+            hits.offer(timestamp);
+        }
+        
+        // Get hits count in past 300 seconds
+        // O(n) Time where n is number of hits in past 300 seconds
+        public int getHits(int timestamp) {
+            // Remove hits older than 300 seconds
+            while (!hits.isEmpty() && hits.peek() <= timestamp - 300) {
+                hits.poll();
+            }
+            return hits.size();
+        }
+    }
+    
+    // Number of Islands using BFS
+    // O(m*n) Time, O(min(m,n)) Space
+    private static int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0) return 0;
+        
+        int m = grid.length;
+        int n = grid[0].length;
+        int count = 0;
+        
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1') {
+                    count++;
+                    
+                    // BFS to mark all connected land
+                    Queue<int[]> queue = new LinkedList<>();
+                    queue.offer(new int[]{i, j});
+                    grid[i][j] = '0'; // Mark as visited
+                    
+                    while (!queue.isEmpty()) {
+                        int[] cell = queue.poll();
+                        int row = cell[0];
+                        int col = cell[1];
+                        
+                        for (int[] dir : directions) {
+                            int newRow = row + dir[0];
+                            int newCol = col + dir[1];
+                            
+                            if (newRow >= 0 && newRow < m && newCol >= 0 && newCol < n && grid[newRow][newCol] == '1') {
+                                grid[newRow][newCol] = '0'; // Mark as visited
+                                queue.offer(new int[]{newRow, newCol});
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return count;
     }
 }
