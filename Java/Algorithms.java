@@ -70,6 +70,7 @@ public class Algorithms {
         maps();
         graphsAndTrees();
         dynamicProgramming();
+        sorting();
     }
 
     private static void arraysAndLists() {
@@ -699,5 +700,272 @@ public class Algorithms {
             prev1 = current;
         }
         return prev1;
+    }
+
+    private static void sorting() {
+        int[] testArray = {64, 34, 25, 12, 22, 11, 90, 5};
+        System.out.println("Original array: " + java.util.Arrays.toString(testArray));
+        
+        // Bubble Sort - O(n^2) Time, O(1) Space
+        // Simple but inefficient, compares adjacent elements
+        int[] bubbleArray = testArray.clone();
+        bubbleSort(bubbleArray);
+        System.out.println("Bubble Sort: " + java.util.Arrays.toString(bubbleArray));
+        
+        // Selection Sort - O(n^2) Time, O(1) Space
+        // Finds minimum element and places it at the beginning
+        int[] selectionArray = testArray.clone();
+        selectionSort(selectionArray);
+        System.out.println("Selection Sort: " + java.util.Arrays.toString(selectionArray));
+        
+        // Insertion Sort - O(n^2) Time, O(1) Space
+        // Builds sorted array one element at a time, good for small arrays
+        int[] insertionArray = testArray.clone();
+        insertionSort(insertionArray);
+        System.out.println("Insertion Sort: " + java.util.Arrays.toString(insertionArray)); 
+
+        // Merge Sort - O(n log n) Time, O(n) Space
+        // Divide and conquer, stable sort, good for large datasets
+        int[] mergeArray = testArray.clone();
+        mergeSort(mergeArray, 0, mergeArray.length - 1);
+        System.out.println("Merge Sort: " + java.util.Arrays.toString(mergeArray));
+        
+        // Quick Sort - O(n log n) average, O(n^2) worst case Time, O(log n) Space
+        // Divide and conquer with pivot, fastest in practice
+        int[] quickArray = testArray.clone();
+        quickSort(quickArray, 0, quickArray.length - 1);
+        System.out.println("Quick Sort: " + java.util.Arrays.toString(quickArray));
+        
+        // Heap Sort - O(n log n) Time, O(1) Space
+        // Uses binary heap data structure, not stable but in-place
+        int[] heapArray = testArray.clone();
+        heapSort(heapArray);
+        System.out.println("Heap Sort: " + java.util.Arrays.toString(heapArray));
+        
+        // Counting Sort - O(n + k) Time, O(k) Space where k is range of input
+        // Non-comparison sort, only works with integers in small range
+        int[] countingArray = {4, 2, 2, 8, 3, 3, 1};
+        int[] countingSorted = countingSort(countingArray);
+        System.out.println("Counting Sort: " + java.util.Arrays.toString(countingSorted));
+        
+        System.out.println("Sorting Complete");
+    }
+
+    // Bubble Sort - Simple but inefficient
+    private static void bubbleSort(int[] arr) {
+        int n = arr.length;
+        for (int i = 0; i < n - 1; i++) {
+            boolean swapped = false;
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    // Swap elements
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                    swapped = true;
+                }
+            }
+            // Optimization: if no swapping occurred, array is sorted
+            if (!swapped) break;
+        }
+    }
+
+    // Selection Sort - Find minimum and place at beginning
+    private static void selectionSort(int[] arr) {
+        int n = arr.length;
+        for (int i = 0; i < n - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < n; j++) {
+                if (arr[j] < arr[minIndex]) {
+                    minIndex = j;
+                }
+            }
+            // Swap minimum element with first element
+            int temp = arr[minIndex];
+            arr[minIndex] = arr[i];
+            arr[i] = temp;
+        }
+    }
+
+    // Insertion Sort - Build sorted array one element at a time
+    private static void insertionSort(int[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            int key = arr[i];
+            int j = i - 1;
+            
+            // Move elements greater than key one position ahead
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = key;
+        }
+    }
+
+    // Merge Sort - Divide and conquer approach
+    private static void mergeSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+            
+            // Recursively sort both halves
+            mergeSort(arr, left, mid);
+            mergeSort(arr, mid + 1, right);
+            
+            // Merge the sorted halves
+            merge(arr, left, mid, right);
+        }
+    }
+
+    private static void merge(int[] arr, int left, int mid, int right) {
+        // Create temporary arrays for left and right subarrays
+        int leftSize = mid - left + 1;
+        int rightSize = right - mid;
+        
+        int[] leftArray = new int[leftSize];
+        int[] rightArray = new int[rightSize];
+        
+        // Copy data to temporary arrays
+        for (int i = 0; i < leftSize; i++) {
+            leftArray[i] = arr[left + i];
+        }
+        for (int j = 0; j < rightSize; j++) {
+            rightArray[j] = arr[mid + 1 + j];
+        }
+        
+        // Merge the temporary arrays back into arr[left..right]
+        int i = 0, j = 0, k = left;
+        
+        while (i < leftSize && j < rightSize) {
+            if (leftArray[i] <= rightArray[j]) {
+                arr[k] = leftArray[i];
+                i++;
+            } else {
+                arr[k] = rightArray[j];
+                j++;
+            }
+            k++;
+        }
+        
+        // Copy remaining elements
+        while (i < leftSize) {
+            arr[k] = leftArray[i];
+            i++;
+            k++;
+        }
+        while (j < rightSize) {
+            arr[k] = rightArray[j];
+            j++;
+            k++;
+        }
+    }
+
+    // Quick Sort - Divide and conquer with pivot
+    private static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pivotIndex = partition(arr, low, high);
+            
+            // Recursively sort elements before and after partition
+            quickSort(arr, low, pivotIndex - 1);
+            quickSort(arr, pivotIndex + 1, high);
+        }
+    }
+
+    private static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high]; // Choose last element as pivot
+        int i = low - 1; // Index of smaller element
+        
+        for (int j = low; j < high; j++) {
+            if (arr[j] < pivot) {
+                i++;
+                // Swap arr[i] and arr[j]
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+        
+        // Swap arr[i+1] and arr[high] (pivot)
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+        
+        return i + 1;
+    }
+
+    // Heap Sort - Uses binary heap data structure
+    private static void heapSort(int[] arr) {
+        int n = arr.length;
+        
+        // Build heap (rearrange array)
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            heapify(arr, n, i);
+        }
+        
+        // Extract elements from heap one by one
+        for (int i = n - 1; i > 0; i--) {
+            // Move current root to end
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+            
+            // Call heapify on the reduced heap
+            heapify(arr, i, 0);
+        }
+    }
+
+    private static void heapify(int[] arr, int n, int i) {
+        int largest = i; // Initialize largest as root
+        int left = 2 * i + 1; // Left child
+        int right = 2 * i + 2; // Right child
+        
+        // If left child is larger than root
+        if (left < n && arr[left] > arr[largest]) {
+            largest = left;
+        }
+        
+        // If right child is larger than largest so far
+        if (right < n && arr[right] > arr[largest]) {
+            largest = right;
+        }
+        
+        // If largest is not root
+        if (largest != i) {
+            int swap = arr[i];
+            arr[i] = arr[largest];
+            arr[largest] = swap;
+            
+            // Recursively heapify the affected sub-tree
+            heapify(arr, n, largest);
+        }
+    }
+
+    // Counting Sort - Non-comparison sort for integers
+    private static int[] countingSort(int[] arr) {
+        // Find the maximum element to determine range
+        int max = java.util.Arrays.stream(arr).max().orElse(0);
+        int min = java.util.Arrays.stream(arr).min().orElse(0);
+        int range = max - min + 1;
+        
+        // Create count array and output array
+        int[] count = new int[range];
+        int[] output = new int[arr.length];
+        
+        // Count occurrences of each element
+        for (int value : arr) {
+            count[value - min]++;
+        }
+        
+        // Modify count array to store actual positions
+        for (int i = 1; i < range; i++) {
+            count[i] += count[i - 1];
+        }
+        
+        // Build output array
+        for (int i = arr.length - 1; i >= 0; i--) {
+            output[count[arr[i] - min] - 1] = arr[i];
+            count[arr[i] - min]--;
+        }
+        
+        return output;
     }
 }
