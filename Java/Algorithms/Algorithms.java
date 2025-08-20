@@ -54,54 +54,6 @@ public class Algorithms {
     }
 
     private static void arraysAndLists() {
-        // Two Pointer implementation where each pointer starts at the ends of the array
-        // O(n) 
-        // Case insensitive, only alphanumeric characters, ignore spaces
-        String palindrome = "A man, a plan, a canal: Panama";
-        int left = 0;
-        int right = palindrome.length() - 1;
-
-        while (left < right) {
-            while ((left < right) && (!Character.isLetterOrDigit(palindrome.charAt(left)))) {
-                left = left + 1;
-            }
-            while ((left < right) && (!Character.isLetterOrDigit(palindrome.charAt(right)))) {
-                right = right - 1;
-            }
-
-            if (Character.toLowerCase(palindrome.charAt(left)) != Character.toLowerCase(palindrome.charAt(right))) {
-                System.out.println("Not a Valid Palindrome");
-            }
-
-            left = left + 1;
-            right = right - 1;
-        }
-        System.out.println("Valid Palindrome");
-
-        // Two Pointer implementation (slow-fast) pointers (Odd Implementation) (Should land on 2)
-        // O(n)
-        ListNode linkedList = new ListNode(0, new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4)))));
-        ListNode slow = linkedList;
-        ListNode fast = linkedList;
-
-        while (fast != null && fast.next != null) {
-            fast = fast.next.next;
-            slow = slow.next;
-        }
-        System.out.println("Value at the Middle of Linked List: " + slow.val);
-
-        // Two Pointer implementation (slow-fast) pointers (Even Implementation) (Should land on 3)
-        // O(n)
-        ListNode linkedListTwo = new ListNode(0, new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5))))));
-        ListNode slowTwo = linkedListTwo;
-        ListNode fastTwo = linkedListTwo;
-
-        while (fastTwo != null && fastTwo.next != null) {
-            fastTwo = fastTwo.next.next;
-            slowTwo = slowTwo.next;
-        }
-        System.out.println("Value at the Middle of Linked List: " + slowTwo.val);
-
         // Sliding Window Algorithm (Fixed Size)
         // O(n)
         int[] input = {0, 1, 2, 3, 4, 5, 6};
