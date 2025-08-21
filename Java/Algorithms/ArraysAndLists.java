@@ -14,6 +14,8 @@ public class ArraysAndLists {
         fixedSlidingWindow();
         dynamicSlidingWindowWithSet();
         dynamicSlidingWindowWithMap();
+        binarySearchWithNumbers();
+        binarySearchWithCondition();
 
         return;
     }
@@ -184,6 +186,68 @@ public class ArraysAndLists {
         }
 
         System.out.println("Maximum length of subarray with " + k + " unique elements: " + maxSum);
+        return;
+    }
+
+    /*
+     * Binary Search Algorithm for searching for an index in a sorted list
+     * O(log n) Time Complexity, O(1) Space Complexity
+     * Example Provided: Find the index of integer 'target' in a sorted list
+     */
+    private static void binarySearchWithNumbers() {
+        int[] sortedArray = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
+        int target = 7;
+
+        int leftPointer = 0;
+        int rightPointer = sortedArray.length - 1;
+
+        while (leftPointer <= rightPointer) {
+            int mid = leftPointer + (rightPointer - leftPointer) / 2;
+
+            if (sortedArray[mid] == target) {
+                System.out.println("Target Index Found: " + mid);
+                return;
+            }
+            else if (sortedArray[mid] < target) {
+                leftPointer = mid + 1;
+            }
+            else {
+                rightPointer = mid - 1;
+            }
+        }
+
+        System.out.println("Target value is not present in the array");
+        return;
+    }
+
+    /*
+     * Binary Search Algorithm for searching conditions such as boolean false->true or array sliced and appended
+     * O(log n) Time Complexity, O(1) Space Complexity
+     * Example Provided: Given an array of booleans, identify the first instance of 'True'
+     */
+    private static void binarySearchWithCondition() {
+        boolean[] array = {false, false, false, false, false, false, false, true, true, true};
+        int leftPointer = 0;
+        int rightPointer = array.length - 1;
+        int firstTrueIndex = -1;
+
+        while(leftPointer <= rightPointer) {
+            int mid = leftPointer + (rightPointer - leftPointer) / 2;
+
+            if (array[mid]) {
+                firstTrueIndex = mid;
+                rightPointer = mid - 1;
+            }
+            else {
+                leftPointer = mid + 1;
+            }
+        }
+
+        if (firstTrueIndex == -1) {
+            System.out.println("No true index found");
+        }
+
+        System.out.println("First True Index: " + firstTrueIndex);
         return;
     }
 }

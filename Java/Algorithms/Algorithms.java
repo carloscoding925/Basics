@@ -30,7 +30,6 @@ public class Algorithms {
     public static void main(String[] args) {
         System.out.println("Entry Point");
 
-        arraysAndLists();
         strings();
         sets();
         maps();
@@ -51,53 +50,6 @@ public class Algorithms {
         ListNode() {}
         ListNode(int val) { this.val = val; }
         ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-    }
-
-    private static void arraysAndLists() {
-        // Binary Search Algorithm
-        // O(log n) Time Complexity O(1) Space Complexity
-        // Sorted Array Example
-        int[] sortedArray = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
-        int target = 7;
-
-        int bsaLeft = 0;
-        int bsaRight = sortedArray.length - 1;
-
-        while(bsaLeft <= bsaRight) {
-            int mid = bsaLeft + (bsaRight - bsaLeft) / 2;
-
-            if (sortedArray[mid] == target) {
-                System.out.println("Found value index via BSA: " + mid);
-                break;
-            }
-            else if (sortedArray[mid] < target) {
-                bsaLeft = mid + 1;
-            }
-            else {
-                bsaRight = mid - 1;
-            }
-        }
-
-        // Binary Search Algorithm
-        // False-True Array Example
-        boolean[] boolArray = {false, false, false, false, false, false, false, true, true, true};
-        int boolLeft = 0;
-        int boolRight = boolArray.length - 1;
-        int firstTrueIndex = -1;
-
-        while(boolLeft <= boolRight) {
-            int mid = boolLeft + (boolRight - boolLeft) / 2;
-
-            if (boolArray[mid]) {
-                firstTrueIndex = mid;
-                boolRight = mid - 1;
-            }
-            else {
-                boolLeft = mid + 1;
-            }
-        }
-
-        System.out.println("First Index with a value of True: " + firstTrueIndex);
     }
 
     private static void strings() {
