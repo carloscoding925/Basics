@@ -30,7 +30,6 @@ public class Algorithms {
     public static void main(String[] args) {
         System.out.println("Entry Point");
 
-        strings();
         sets();
         maps();
         graphsAndTrees();
@@ -50,48 +49,6 @@ public class Algorithms {
         ListNode() {}
         ListNode(int val) { this.val = val; }
         ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-    }
-
-    private static void strings() {
-        String original = "input";
-
-        // Tracking time
-        long startTime;
-        long endTime;
-
-        // Bad Practice, creates a new string every time a character is appended
-        // instead of modifying the existing string because strings are immutable. O(n^2)
-        startTime = System.nanoTime();
-        String result = "";
-        for (char character : original.toCharArray()) {
-            result = result + character;
-        }
-        endTime = System.nanoTime();
-        System.out.println("String Concatenation Result: " + result + " Time to Execute: " + (endTime - startTime));
-
-        // This has a better time complexity O(n) because it is faster to build
-        // an array of characters and convert into a string instead of creating a new 
-        // string every time you append a character
-        startTime = System.nanoTime();
-        char[] charResult = new char[original.length()];
-        int i = 0;
-        for (char character : original.toCharArray()) {
-            charResult[i] = character;
-            i++;
-        }
-        String resultString = new String(charResult);
-        endTime = System.nanoTime();
-        System.out.println("Character Array Result: " + resultString + " Time to Execute: " + (endTime - startTime));
-
-        // More common Java approach
-        startTime = System.nanoTime();
-        StringBuilder stringBuilder = new StringBuilder();
-        for (char character : original.toCharArray()) {
-            stringBuilder.append(character);
-        }
-        String builderResult = stringBuilder.toString();
-        endTime = System.nanoTime();
-        System.out.println("String Builder Result: " + builderResult + " Time to Execute: " + (endTime - startTime));
     }
 
     private static void sets() {
