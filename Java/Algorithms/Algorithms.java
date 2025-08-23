@@ -30,7 +30,6 @@ public class Algorithms {
     public static void main(String[] args) {
         System.out.println("Entry Point");
 
-        sets();
         maps();
         graphsAndTrees();
         dynamicProgramming();
@@ -49,25 +48,6 @@ public class Algorithms {
         ListNode() {}
         ListNode(int val) { this.val = val; }
         ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-    }
-
-    private static void sets() {
-        int[] numbers = {1, 2, 3, 4, 5};
-
-        // Tracking time
-        long startTime;
-        long endTime;
-
-        // Checking if an item exists in a set should be O(1) time
-        Set<Integer> numbersSet = new HashSet<>();
-        for (int num : numbers) {
-            numbersSet.add(num);
-        }
-        startTime = System.nanoTime();
-        boolean exists = numbersSet.contains(3);
-        endTime = System.nanoTime();
-
-        System.out.println("Checking if item exists: " + exists + " Time to Execute: " + (endTime - startTime));
     }
 
     private static void maps() {
