@@ -30,7 +30,6 @@ public class Algorithms {
     public static void main(String[] args) {
         System.out.println("Entry Point");
 
-        maps();
         graphsAndTrees();
         dynamicProgramming();
         sorting();
@@ -48,46 +47,6 @@ public class Algorithms {
         ListNode() {}
         ListNode(int val) { this.val = val; }
         ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-    }
-
-    private static void maps() {
-        List<String> stringsList = List.of("One", "Two", "One", "Three");
-        Map<String, Integer> myMap = new HashMap<>();
-
-        // Frequency Map
-        for (String item : stringsList) {
-            if (!myMap.containsKey(item)) {
-                myMap.put(item, 1);
-            }
-            else {
-                myMap.put(item, myMap.get(item) + 1);
-            }
-        }
-        System.out.println("Printing Map: " + myMap.toString());
-
-        Map<String, Integer> myOtherMap = new HashMap<>();
-
-        // Alternative
-        for (String item : stringsList) {
-            myOtherMap.put(item, myOtherMap.getOrDefault(item, 0) + 1);
-        }
-        System.out.println("Printing Other Map: " + myOtherMap.toString());
-
-        // Two Sum example
-        // O(n) Time Complexity and Space Complexity
-        int[] nums = {2, 7, 11, 15};
-        int target = 9;
-        Map<Integer, Integer> integerMap = new HashMap<>();
-
-        for (int i = 0; i < nums.length; i++) {
-            int complement = target - nums[i];
-            if (integerMap.containsKey(complement)) {
-                System.out.println("First Index: " + integerMap.get(complement) + " Second Index: " + i);
-            }
-            else {
-                integerMap.put(nums[i], i);
-            }
-        }
     }
 
     static class TreeNode {

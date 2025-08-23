@@ -28,5 +28,6 @@ public class Sets {
         long end = System.nanoTime();
 
         System.out.println("Found number in set: " + containsInt + " - Time to Execute: " + (end - start));
+        return;
     }
 }
