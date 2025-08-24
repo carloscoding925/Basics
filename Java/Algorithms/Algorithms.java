@@ -40,30 +40,6 @@ public class Algorithms {
         greedy();
     }
 
-    static class ListNode {
-        int val;
-        ListNode next = null;
-
-        ListNode() {}
-        ListNode(int val) { this.val = val; }
-        ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-    }
-
-    static class TreeNode {
-        int val;
-        List<TreeNode> children;
-
-        TreeNode(int val) {
-            this.val = val;
-            this.children = new ArrayList<>();
-        }
-
-        TreeNode(int val, List<TreeNode> children) {
-            this.val = val;
-            this.children = children;
-        }
-    }
-
     static class GraphNode {
         int val;
         List<GraphNode> neighbors;
@@ -75,58 +51,6 @@ public class Algorithms {
     }
 
     private static void graphsAndTrees() {
-        // Breadth-First Search on Trees
-        // O(n) Time Complexity, O(w) Space Complexity where w is the maximum width
-
-        TreeNode root = new TreeNode(1);
-        root.children.add(new TreeNode(2));
-        root.children.add(new TreeNode(3));
-        root.children.get(0).children.add(new TreeNode(4));
-        root.children.get(0).children.add(new TreeNode(5));
-
-        /*
-         * This currently throws a warning for dead code, but is required before
-         * starting a BFS search
-         * 
-        if (root == null) {
-            System.out.println("Tree is Null");
-        }
-        */
-
-        Queue<TreeNode> queue = new LinkedList<>();
-        int target = 4;
-
-        queue.offer(root);
-
-        while (!queue.isEmpty()) {
-            TreeNode node = queue.poll();
-            System.out.println("Visiting Tree Node: " + node.val);
-
-            for (TreeNode child : node.children) {
-                if (child.val == target) {
-                    System.out.println("Found Node with Target: " + child.val);
-                    break;
-                }
-                queue.offer(child);
-            }
-        }
-
-        System.out.println("Tree BFS Search Complete");
-
-        // Depth-First Search on Trees
-        // O(n) Time Complexity, O(h) Space Complexity where h is the height of the tree
-        /*
-         * Use Case:
-         * Binary Trees, N-ary Trees
-         * When you need to explore all paths or find a specific node
-         * When you want to go deep before exploring siblings
-        */
-
-        target = 5;
-        TreeNode result = dfs(root, 5);
-        System.out.println("Found Node with Target Value: " + result.val);
-        System.out.println("Tree DFS Complete");
-
         // Breadth-First Search on Graphs
         // O(V + E) Time Complexity, O(V) Space Complexity where V is vertices and E is edges
         /*
@@ -655,25 +579,6 @@ public class Algorithms {
         }
         
         return false;
-    }
-
-    private static TreeNode dfs(TreeNode root, int target) {
-        if (root == null) {
-            return null;
-        }
-
-        if (root.val == target) {
-            return root;
-        }
-
-        for (TreeNode child : root.children) {
-            TreeNode result = dfs(child, target);
-            if (result != null) {
-                return result;
-            }
-        }
-
-        return null;
     }
 
     private static void dfsGraph(GraphNode root, Set<GraphNode> visited) {
