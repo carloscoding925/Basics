@@ -12,7 +12,16 @@ public class Sorting {
     }
 
     /*
-     * Bubble Sort
+     * Bubble Sort works by iterating through the entire array and comparing adjacent elements. Each pass
+     * of Bubble Sort moves the largest item to its correct spot at the end of the sorted array, with items
+     * being sorted from right to left (largest to smallest). Since each pass moves the largest usorted item
+     * to its correct position, in our second for loop we can use length - i - 1 to shorten the amount of items
+     * each iteration needs to check. If the array is sorted before the second for loop can run for the amount
+     * of items in the array, the 'sorted' flag will be marked as 'false' and exit the algorithm early for a
+     * faster run time.
+     * 
+     * Time Complexity of O(n^2) since two for loops are used for analyzing each item in the array
+     * Space Complexity of O(1) since constant space is used (temp variables, flags, and fixed array)
      */
     private static void bubbleSort(int[] array) {
         int length = array.length;
