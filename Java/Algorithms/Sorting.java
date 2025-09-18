@@ -7,6 +7,7 @@ public class Sorting {
         int[] randArray = {64, 34, 25, 12, 22, 11, 90, 5, 123, 13, 97, 34, 98, 1, 99, 55, 25, 19, 67, 69, 100};
 
         bubbleSort(randArray);
+        selectionSort(randArray);
 
         return;
     }
@@ -42,6 +43,41 @@ public class Sorting {
 
         long endTime = System.nanoTime();
         System.out.println("Sorting with Bubble Sort - Time to Execute: " + (endTime - startTime));
+
+        return;
+    }
+
+    private static void selectionSort(int[] array) {
+        int length = array.length;
+        long startTime = System.nanoTime();
+
+        for (int i = 0; i < length - 1; i++) {
+            int min = i;
+            for (int j = i + 1; j < length; j++) {
+                if (array[j] < array[min]) {
+                    min = j;
+                }
+            }
+
+            int temp = array[min];
+            array[min] = array[i];
+            array[i] = temp;
+        }
+
+        long endTime = System.nanoTime();
+        System.out.println("Sorting with Selection Sort - Time to Execute: " + (endTime - startTime));
+
+        return;
+    }
+
+    private static void insertionSort(int[] array) {
+        long startTime = System.nanoTime();
+        for (int i = 1; i < array.length; i++) {
+
+        }
+
+        long endTime = System.nanoTime();
+        System.out.println("Sorting with Insertion Sort - Time to Execute: " + (endTime - startTime));
 
         return;
     }
