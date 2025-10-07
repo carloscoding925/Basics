@@ -9,22 +9,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-/*
- * Common Time and Space Complexities 
- * 
- * O(1) Constant - Set Lookups, Accessing an Array Index
- * O(log n) Logarithmic - Binary Search, Splitting data in half each time
- * O(n) - Linear - Each item once, loops & traversing lists
- * O(n log n) - Sorting, default sort methods
- * O(n^2) - Nested loops for->for, brute force comparisons
- * O(2^n)
- * O(n!)
- * 
- * For inputs 10^5, need O(n log n) or better
- * For inputs 10^4, need O(n^2) or better
- * 
- */
-
 public class Algorithms {
 
     public static void main(String[] args) {
@@ -515,22 +499,6 @@ public class Algorithms {
         }
         
         return false;
-    }
-
-    private static void dfsGraph(GraphNode root, Set<GraphNode> visited) {
-        if (root == null) {
-            return;
-        }
-
-        System.out.println("Visiting graph node via DFS: " + root.val);
-
-        for (GraphNode neighbor : root.neighbors) {
-            if (visited.contains(neighbor)) {
-                continue;
-            }
-            visited.add(neighbor);
-            dfsGraph(neighbor, visited);
-        }
     }
 
     private static void dynamicProgramming() {
