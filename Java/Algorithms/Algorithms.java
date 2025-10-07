@@ -658,12 +658,6 @@ public class Algorithms {
         int[] testArray = {64, 34, 25, 12, 22, 11, 90, 5};
         System.out.println("Original array: " + java.util.Arrays.toString(testArray));
         
-        // Quick Sort - O(n log n) average, O(n^2) worst case Time, O(log n) Space
-        // Divide and conquer with pivot, fastest in practice
-        int[] quickArray = testArray.clone();
-        quickSort(quickArray, 0, quickArray.length - 1);
-        System.out.println("Quick Sort: " + java.util.Arrays.toString(quickArray));
-        
         // Heap Sort - O(n log n) Time, O(1) Space
         // Uses binary heap data structure, not stable but in-place
         int[] heapArray = testArray.clone();
@@ -677,39 +671,6 @@ public class Algorithms {
         System.out.println("Counting Sort: " + java.util.Arrays.toString(countingSorted));
         
         System.out.println("Sorting Complete");
-    }
-
-    // Quick Sort - Divide and conquer with pivot
-    private static void quickSort(int[] arr, int low, int high) {
-        if (low < high) {
-            int pivotIndex = partition(arr, low, high);
-            
-            // Recursively sort elements before and after partition
-            quickSort(arr, low, pivotIndex - 1);
-            quickSort(arr, pivotIndex + 1, high);
-        }
-    }
-
-    private static int partition(int[] arr, int low, int high) {
-        int pivot = arr[high]; // Choose last element as pivot
-        int i = low - 1; // Index of smaller element
-        
-        for (int j = low; j < high; j++) {
-            if (arr[j] < pivot) {
-                i++;
-                // Swap arr[i] and arr[j]
-                int temp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = temp;
-            }
-        }
-        
-        // Swap arr[i+1] and arr[high] (pivot)
-        int temp = arr[i + 1];
-        arr[i + 1] = arr[high];
-        arr[high] = temp;
-        
-        return i + 1;
     }
 
     // Heap Sort - Uses binary heap data structure
