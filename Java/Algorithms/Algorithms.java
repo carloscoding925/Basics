@@ -657,12 +657,6 @@ public class Algorithms {
     private static void sorting() {
         int[] testArray = {64, 34, 25, 12, 22, 11, 90, 5};
         System.out.println("Original array: " + java.util.Arrays.toString(testArray));
-
-        // Merge Sort - O(n log n) Time, O(n) Space
-        // Divide and conquer, stable sort, good for large datasets
-        int[] mergeArray = testArray.clone();
-        mergeSort(mergeArray, 0, mergeArray.length - 1);
-        System.out.println("Merge Sort: " + java.util.Arrays.toString(mergeArray));
         
         // Quick Sort - O(n log n) average, O(n^2) worst case Time, O(log n) Space
         // Divide and conquer with pivot, fastest in practice
@@ -683,63 +677,6 @@ public class Algorithms {
         System.out.println("Counting Sort: " + java.util.Arrays.toString(countingSorted));
         
         System.out.println("Sorting Complete");
-    }
-
-    // Merge Sort - Divide and conquer approach
-    private static void mergeSort(int[] arr, int left, int right) {
-        if (left < right) {
-            int mid = left + (right - left) / 2;
-            
-            // Recursively sort both halves
-            mergeSort(arr, left, mid);
-            mergeSort(arr, mid + 1, right);
-            
-            // Merge the sorted halves
-            merge(arr, left, mid, right);
-        }
-    }
-
-    private static void merge(int[] arr, int left, int mid, int right) {
-        // Create temporary arrays for left and right subarrays
-        int leftSize = mid - left + 1;
-        int rightSize = right - mid;
-        
-        int[] leftArray = new int[leftSize];
-        int[] rightArray = new int[rightSize];
-        
-        // Copy data to temporary arrays
-        for (int i = 0; i < leftSize; i++) {
-            leftArray[i] = arr[left + i];
-        }
-        for (int j = 0; j < rightSize; j++) {
-            rightArray[j] = arr[mid + 1 + j];
-        }
-        
-        // Merge the temporary arrays back into arr[left..right]
-        int i = 0, j = 0, k = left;
-        
-        while (i < leftSize && j < rightSize) {
-            if (leftArray[i] <= rightArray[j]) {
-                arr[k] = leftArray[i];
-                i++;
-            } else {
-                arr[k] = rightArray[j];
-                j++;
-            }
-            k++;
-        }
-        
-        // Copy remaining elements
-        while (i < leftSize) {
-            arr[k] = leftArray[i];
-            i++;
-            k++;
-        }
-        while (j < rightSize) {
-            arr[k] = rightArray[j];
-            j++;
-            k++;
-        }
     }
 
     // Quick Sort - Divide and conquer with pivot
