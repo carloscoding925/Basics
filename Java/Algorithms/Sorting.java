@@ -1,5 +1,7 @@
 package Java.Algorithms;
 
+import java.util.Arrays;
+
 public class Sorting {
     public static void main(String args[]) {
         System.out.println("--- This java class will go over common sorting algorithms ---");
@@ -15,6 +17,11 @@ public class Sorting {
 
         quickSort(randArray, 0, randArray.length - 1);
         System.out.println("Sorting with Quick Sort");
+
+        heapSort(randArray);
+
+        int[] countingArray = {4, 2, 2, 8, 3, 3, 1};
+        countingSort(countingArray);
 
         return;
     }
@@ -178,5 +185,72 @@ public class Sorting {
         array[right] = temp;
 
         return i + 1;
+    }
+
+    private static void heapSort(int[] array) {
+        System.out.println("Sorting with Heap Sort");
+        int n = array.length;
+
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            heapify(array, n, i);
+        }
+
+        for (int i = n - 1; i > 0; i--) {
+            int temp = array[0];
+            array[0] = array[i];
+            array[i] = temp;
+
+            heapify(array, i, 0);
+        }
+
+        return;
+    }
+
+    private static void heapify(int[] array, int n, int i) {
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < n && array[left] > array[largest]) {
+            largest = left;
+        }
+
+        if (right < n && array[right] > array[largest]) {
+            largest = right;
+        }
+
+        if (largest != i) {
+            int swap = array[i];
+            array[i] = array[largest];
+            array[largest] = swap;
+
+            heapify(array, n, largest);
+        }
+    }
+
+    private static int[] countingSort(int[] array) {
+        System.out.println("Sorting with Counting Sort");
+
+        int max = Arrays.stream(array).max().orElse(0);
+        int min = Arrays.stream(array).min().orElse(0);
+        int range = max - min + 1;
+
+        int[] count = new int[range];
+        int[] output = new int[array.length];
+
+        for (int value : array) {
+            count[value - min]++;
+        }
+
+        for (int i = 1; i < range; i++) {
+            count[i] += count[i - 1];
+        }
+
+        for (int i = array.length - 1; i >= 0; i--) {
+            output[count[array[i] - min] - 1] = array[i];
+            count[array[i] - min]--;
+        }
+
+        return output;
     }
 }

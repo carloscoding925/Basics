@@ -16,7 +16,6 @@ public class Algorithms {
 
         graphsAndTrees();
         dynamicProgramming();
-        sorting();
         advancedTopics();
         stacks();
         queues();
@@ -620,102 +619,6 @@ public class Algorithms {
             prev1 = current;
         }
         return prev1;
-    }
-
-    private static void sorting() {
-        int[] testArray = {64, 34, 25, 12, 22, 11, 90, 5};
-        System.out.println("Original array: " + java.util.Arrays.toString(testArray));
-        
-        // Heap Sort - O(n log n) Time, O(1) Space
-        // Uses binary heap data structure, not stable but in-place
-        int[] heapArray = testArray.clone();
-        heapSort(heapArray);
-        System.out.println("Heap Sort: " + java.util.Arrays.toString(heapArray));
-        
-        // Counting Sort - O(n + k) Time, O(k) Space where k is range of input
-        // Non-comparison sort, only works with integers in small range
-        int[] countingArray = {4, 2, 2, 8, 3, 3, 1};
-        int[] countingSorted = countingSort(countingArray);
-        System.out.println("Counting Sort: " + java.util.Arrays.toString(countingSorted));
-        
-        System.out.println("Sorting Complete");
-    }
-
-    // Heap Sort - Uses binary heap data structure
-    private static void heapSort(int[] arr) {
-        int n = arr.length;
-        
-        // Build heap (rearrange array)
-        for (int i = n / 2 - 1; i >= 0; i--) {
-            heapify(arr, n, i);
-        }
-        
-        // Extract elements from heap one by one
-        for (int i = n - 1; i > 0; i--) {
-            // Move current root to end
-            int temp = arr[0];
-            arr[0] = arr[i];
-            arr[i] = temp;
-            
-            // Call heapify on the reduced heap
-            heapify(arr, i, 0);
-        }
-    }
-
-    private static void heapify(int[] arr, int n, int i) {
-        int largest = i; // Initialize largest as root
-        int left = 2 * i + 1; // Left child
-        int right = 2 * i + 2; // Right child
-        
-        // If left child is larger than root
-        if (left < n && arr[left] > arr[largest]) {
-            largest = left;
-        }
-        
-        // If right child is larger than largest so far
-        if (right < n && arr[right] > arr[largest]) {
-            largest = right;
-        }
-        
-        // If largest is not root
-        if (largest != i) {
-            int swap = arr[i];
-            arr[i] = arr[largest];
-            arr[largest] = swap;
-            
-            // Recursively heapify the affected sub-tree
-            heapify(arr, n, largest);
-        }
-    }
-
-    // Counting Sort - Non-comparison sort for integers
-    private static int[] countingSort(int[] arr) {
-        // Find the maximum element to determine range
-        int max = java.util.Arrays.stream(arr).max().orElse(0);
-        int min = java.util.Arrays.stream(arr).min().orElse(0);
-        int range = max - min + 1;
-        
-        // Create count array and output array
-        int[] count = new int[range];
-        int[] output = new int[arr.length];
-        
-        // Count occurrences of each element
-        for (int value : arr) {
-            count[value - min]++;
-        }
-        
-        // Modify count array to store actual positions
-        for (int i = 1; i < range; i++) {
-            count[i] += count[i - 1];
-        }
-        
-        // Build output array
-        for (int i = arr.length - 1; i >= 0; i--) {
-            output[count[arr[i] - min] - 1] = arr[i];
-            count[arr[i] - min]--;
-        }
-        
-        return output;
     }
 
     private static void advancedTopics() {
