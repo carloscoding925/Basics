@@ -1,0 +1,1 @@
+/Users/carloshernandez/Documents/Coding\ Projects/Practice/Rust/Chapter\ 1/hello_cargo/target/debug/hello_cargo: /Users/carloshernandez/Documents/Coding\ Projects/Practice/Rust/Chapter\ 1/hello_cargo/src/main.rs
