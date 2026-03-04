@@ -37,4 +37,22 @@ fn main() {
     let c: char = 'Z';
 
     println!("Booleans and Characters: {}, {}", t, c);
+
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+    println!("This is a Tuple: {:?}", tup);
+
+    let select_tuple_int: i32 = tup.0;
+    println!("The Integer value of the tuple is: {select_tuple_int}");
+
+    let (ti, tf, tu) = tup;
+    println!("Or we can destructure a tuple and get the following: {}, {}, {}", ti, tf, tu);
+
+    let empty_unit: () = ();
+    println!("Tuples can also be empty which is refered to as a 'unit' : {:?}", empty_unit);
+
+    let arr: [i32; 5] = [1, 2, 3, 4, 5];
+    let first_element = arr[0];
+
+    println!("Rust arrays: {:?}", arr);
+    println!("First element out of an array: {first_element}");
 }
