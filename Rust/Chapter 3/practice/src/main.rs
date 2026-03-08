@@ -15,6 +15,8 @@ fn main() {
     let nth_fib: i32 = nth_fibonacci(fib);
 
     println!("The {fib} fibonacci number is: {nth_fib}");
+
+    christmas_carol();
 }
 
 // (x * (9/5)) + 32
@@ -37,4 +39,10 @@ fn nth_fibonacci(x: i32) -> i32 {
     }
 
     nth_fibonacci(x - 1) + nth_fibonacci(x - 2)
+}
+
+fn christmas_carol() -> () {
+    for number in 1..13 {
+        println!("On the {number} day of christmas");
+    }
 }
