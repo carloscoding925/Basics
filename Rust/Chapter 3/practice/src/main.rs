@@ -43,6 +43,56 @@ fn nth_fibonacci(x: i32) -> i32 {
 
 fn christmas_carol() -> () {
     for number in 1..13 {
-        println!("On the {number} day of christmas");
+        println!("On the {number} day of Christmas, my true love sent to me");
+
+        if number > 11 {
+            println!("Twelve drummers drumming");
+        }
+
+        if number > 10 {
+            println!("Eleven pipers piping");
+        }
+
+        if number > 9 {
+            println!("Ten lords a-leaping");
+        }
+
+        if number > 8 {
+            println!("Nine ladies dancing");
+        }
+
+        if number > 7 {
+            println!("Eight maids a-milking");
+        }
+
+        if  number > 6 {
+            println!("Seven swans a-swimming");
+        }
+
+        if number > 5 {
+            println!("Six geese a-laying");
+        }
+
+        if number > 4 {
+            println!("Five golden rings");
+        }
+
+        if number > 3 {
+            println!("Four calling birds");
+        }
+
+        if number > 2 {
+            println!("Three french hends");
+        }
+
+        if number > 1 {
+            println!("Two turtle doves and");
+        }
+
+        if number > 0 {
+            println!("A partridge in a pear tree");
+        }
+
+        println!("\n");
     }
 }
