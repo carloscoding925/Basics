@@ -10,6 +10,11 @@ fn main() {
     let fahrenheit: f32 = celsius_to_fahrenheit(celsius);
 
     println!("{celsius} in celsius is: {fahrenheit} fahrenheit");
+
+    let fib: i32 = 7;
+    let nth_fib: i32 = nth_fibonacci(fib);
+
+    println!("The {fib} fibonacci number is: {nth_fib}");
 }
 
 // (x * (9/5)) + 32
@@ -20,4 +25,16 @@ fn celsius_to_fahrenheit(x: f32) -> f32 {
 // (x - 32) * (5/9)
 fn fahrenheit_to_celsius(x: f32) -> f32 {
     (x - 32.0) * (5.0/9.0)
+}
+
+fn nth_fibonacci(x: i32) -> i32 {
+    if x < 0 {
+        return 0;
+    }
+
+    if x == 0 || x == 1 {
+        return x;
+    }
+
+    nth_fibonacci(x - 1) + nth_fibonacci(x - 2)
 }
