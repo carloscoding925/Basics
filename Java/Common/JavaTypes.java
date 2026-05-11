@@ -1,4 +1,6 @@
 /*
+* Carlos Hernandez - 2.0.0
+*
 * The core data types in the java language.
 * If looking for object wrappers (Boolean, Integer, etc) These are in the Data Structures folder.
 * Queues, Lists, and other arrays will also be in the Data Structures folder.
@@ -13,17 +15,19 @@ public class JavaTypes {
 
     private static void dataTypes() {
         // Primitive data types
-        int integer = 1; // Integer variable
-        double decimal = 1.1; // Decimal variable
-        char character = 'a'; // Character variable
-        String string = "Hello"; // String variable
-        boolean bool = true; // Boolean variable
+        int integer = 1; // Integer variable | 4 bytes | -2,147,483,648 to 2,147,483,647
+        double decimal = 1.1; // Decimal variable | 8 bytes | 15/16 Significant Decimal Digits
+        char character = 'a'; // Character variable | 2 bytes | 0 to 65,535 (Unicode '\u0000' to '\uffff')
+        boolean bool = true; // Boolean variable | size depends on jvm | true - false only
 
         // Not so common
-        byte byteVar = 1; // Byte variable
-        short shortVar = 1; // Short variable
-        long longVar = 1; // Long variable
-        float floatVar = 1.1f; // Float variable
+        byte byteVar = 1; // Byte variable | 1 byte | -128 to 127
+        short shortVar = 1; // Short variable | 2 bytes | -32,768 to 32,767
+        long longVar = 1; // Long variable | 8 bytes | -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
+        float floatVar = 1.1f; // Float variable | 4 bytes | 7 Significant Decimal Digits
+
+        // Strings
+        String string = "Hello"; // String variable
 
         final int constantInt = 1; // Final (Constant) variables cannot be changed
 
