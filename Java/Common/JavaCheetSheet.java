@@ -1,5 +1,5 @@
-// Package refers to the directory where your java file is located in. 
-package Java;
+// Package refers to the directory where your java file is located in.
+package Java.Common;
 
 import java.util.HashMap;
 
@@ -64,7 +64,7 @@ class JavaOperators {
 
 class JavaMethods {
     static void staticMethod() { // This method can be called without creating an object
-        System.out.println("This is a static method"); 
+        System.out.println("This is a static method");
     }
 
     public void publicMethod() { // An object must be created to call this method
@@ -98,6 +98,6 @@ class JavaHashmapMethods {
 
         map.put(1, "Sample Item"); // Adds a new item to the HashMap
         String myString = map.get(1); // Returns the value of the key 1
-        
+
     }
 }

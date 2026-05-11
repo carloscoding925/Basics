@@ -1,4 +1,4 @@
-package Java;
+package Java.Common;
 
 public class JavaTypes {
     public static void main(String[] args) {
