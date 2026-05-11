@@ -1,3 +1,9 @@
+/*
+* The core data types in the java language.
+* If looking for object wrappers (Boolean, Integer, etc) These are in the Data Structures folder.
+* Queues, Lists, and other arrays will also be in the Data Structures folder.
+*/
+
 package Java.Common;
 
 public class JavaTypes {
@@ -28,8 +34,25 @@ public class JavaTypes {
         String[][] string2DArray = {{"Hello", "World"}, {"Java", "Programming"}}; // 2D String array variable
 
         String[] stringArray2 = new String[5]; // Array of Strings with 5 elements
+        int[][] matrix = new int[4][4]; // 4x4 Matrix, 16 elements
 
+        // Variable Casting
+        // Narrow Casting (a 'larger' variable such as a double casted to an int)
         double sampleDouble = 5.2;
-        int sampleInt = (int) sampleDouble; // Casting a double to an int
+        int sampleInt = (int) sampleDouble; // Casting a double to an int (5)
+
+        // Wide Casting - No explicit cast needed (could also do int -> long)
+        double castedDouble = sampleInt;
+
+        // Char <-> Int Casting
+        char letter = 'A';
+        int ascii = (int) letter; // 65
+
+        // Type Inference
+        var name = "Myself"; // String
+        var infNum = 1; // int
+
+        // Null
+        String nullString = null; // Null is its own type, but can also be used for objects
     }
 }
